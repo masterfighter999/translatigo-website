@@ -1512,7 +1512,7 @@
           </div>
 
           <div class="mt-6">
-            <button onclick="alert('Selected Starter Plan ($18 for 200 minutes + 20 minutes free).')" class="btn-brutal bg-white hover:bg-neo-lime w-full py-3 text-xs btn-wiggle">
+            <button onclick="tgCheckout('STARTER', 'Starter — $18 / 200 mins')" class="btn-brutal bg-white hover:bg-neo-lime w-full py-3 text-xs btn-wiggle">
               Get Starter ($18)
             </button>
           </div>
@@ -1563,7 +1563,7 @@
           </div>
 
           <div class="mt-6">
-            <button onclick="alert('Selected Pro Plan ($96 for 1,200 minutes + 20 minutes free).')" class="btn-brutal bg-black text-white hover:bg-neo-lime hover:text-black w-full py-3.5 text-xs btn-wiggle">
+            <button onclick="tgCheckout('PRO', 'Pro — $96 / 1,200 mins')" class="btn-brutal bg-black text-white hover:bg-neo-lime hover:text-black w-full py-3.5 text-xs btn-wiggle">
               Get Pro ($96)
             </button>
           </div>
@@ -1609,7 +1609,7 @@
           </div>
 
           <div class="mt-6">
-            <button onclick="alert('Selected Business Plan ($196 for 2,800 minutes + 20 minutes free).')" class="btn-brutal bg-white hover:bg-neo-cyan w-full py-3 text-xs btn-wiggle">
+            <button onclick="tgCheckout('BUSINESS', 'Business — $196 / 2,800 mins')" class="btn-brutal bg-white hover:bg-neo-cyan w-full py-3 text-xs btn-wiggle">
               Get Business ($196)
             </button>
           </div>
@@ -2741,6 +2741,66 @@
         body.classList.add('hidden');
         icon.textContent = '+';
       }
+    }
+
+    // -------------------------------------------------------------------
+    // Checkout: mandate-linking via Render middleware.
+    // POST {email, planTier} -> {checkoutUrl} -> redirect to Dodo checkout.
+    // Guests can buy without an account; credits are parked under the
+    // email and claimed automatically on later signup/login.
+    // -------------------------------------------------------------------
+    const TG_API_BASE = 'https://translatigo-middleware.onrender.com/api/payments';
+
+    function tgCheckout(planTier, label) {
+      const overlay = document.createElement('div');
+      overlay.className = 'fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4';
+      overlay.innerHTML = `
+        <div class="card-brutal bg-white p-6 max-w-sm w-full" style="box-shadow:6px 6px 0 #000;border:3px solid #000">
+          <h3 class="text-lg font-black uppercase mb-1">${label}</h3>
+          <p class="text-xs font-mono text-gray-600 mb-4">Enter your email to continue to secure checkout. No account needed — credits are waiting when you sign up.</p>
+          <input id="tg-email" type="email" required placeholder="you@company.com"
+            class="w-full border-2 border-black px-3 py-2 font-mono text-sm mb-3 focus:outline-none focus:bg-neo-yellow" />
+          <div id="tg-checkout-err" class="hidden text-red-600 font-mono text-xs font-bold mb-2"></div>
+          <div class="flex gap-2">
+            <button id="tg-checkout-go" class="btn-brutal bg-neo-lime flex-1 py-2 text-xs font-black">Continue →</button>
+            <button id="tg-checkout-x" class="btn-brutal bg-white px-3 py-2 text-xs font-black">✕</button>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      const email = overlay.querySelector('#tg-email');
+      const err = overlay.querySelector('#tg-checkout-err');
+      const go = overlay.querySelector('#tg-checkout-go');
+      email.focus();
+      overlay.querySelector('#tg-checkout-x').onclick = () => overlay.remove();
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+      async function submit() {
+        const value = email.value.trim();
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value)) {
+          err.textContent = 'Please enter a valid email.';
+          err.classList.remove('hidden');
+          return;
+        }
+        go.disabled = true;
+        go.textContent = 'Loading…';
+        try {
+          const res = await fetch(`${TG_API_BASE}/link-mandate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: value, planTier }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.checkoutUrl) throw new Error(data.error || 'checkout unavailable');
+          window.location.href = data.checkoutUrl;
+        } catch (e) {
+          err.textContent = e.message || 'Something went wrong — try again.';
+          err.classList.remove('hidden');
+          go.disabled = false;
+          go.textContent = 'Continue →';
+        }
+      }
+      go.onclick = submit;
+      email.onkeydown = (e) => { if (e.key === 'Enter') submit(); };
     }
   </script>
 </body>
