@@ -1,0 +1,2747 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Translatigo — They Speak Their Language, You Hear It In Yours</title>
+  <meta name="description" content="They speak their language, you hear it in yours. Real-time voice-to-voice AI interpreter Chrome extension for Zoom, Google Meet, Microsoft Teams, and video calls. 80 languages supported. Less latency and far more value for money than human interpreters." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            neo: {
+              yellow: '#FFE600',
+              lime: '#00F076',
+              cyan: '#00D2FF',
+              coral: '#FF486A',
+              purple: '#B488FF',
+              paper: '#FFFDF5',
+              black: '#0D0D0D',
+              surface: '#FFFFFF',
+            }
+          },
+          boxShadow: {
+            'brutal-sm': '3px 3px 0px #0D0D0D',
+            'brutal': '5px 5px 0px #0D0D0D',
+            'brutal-lg': '8px 8px 0px #0D0D0D',
+            'brutal-xl': '12px 12px 0px #0D0D0D',
+            'brutal-hover': '7px 7px 0px #0D0D0D',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Neobrutalist dot matrix background */
+    body {
+      background-color: #FFFDF5;
+      background-image: radial-gradient(#0d0d0d 1.2px, transparent 1.2px);
+      background-size: 24px 24px;
+      color: #0D0D0D;
+    }
+
+    /* Chunky scrollbars */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FFE600;
+      border-left: 3px solid #0D0D0D;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0D0D0D;
+      border: 2px solid #FFE600;
+    }
+
+    /* Brutalist base components & interactive animations */
+    .btn-brutal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 3px solid #0D0D0D;
+      box-shadow: 5px 5px 0px #0D0D0D;
+      transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .btn-brutal:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 8px 8px 0px #0D0D0D;
+    }
+    .btn-brutal:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #0D0D0D;
+    }
+
+    .card-brutal {
+      background: #FFFFFF;
+      border: 3px solid #0D0D0D;
+      box-shadow: 6px 6px 0px #0D0D0D;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-brutal:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 10px 10px 0px #0D0D0D;
+    }
+
+    /* Scroll Reveal Animation */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Floating Sticker Animations */
+    @keyframes brutal-float {
+      0%, 100% { transform: translateY(0px) rotate(3deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
+    }
+    @keyframes brutal-float-alt {
+      0%, 100% { transform: translateY(0px) rotate(-3deg); }
+      50% { transform: translateY(-8px) rotate(-1deg); }
+    }
+    .animate-float {
+      animation: brutal-float 3.8s ease-in-out infinite;
+    }
+    .animate-float-alt {
+      animation: brutal-float-alt 4.2s ease-in-out infinite;
+    }
+
+    /* Gentle pulsing highlight for pricing badges and live badges */
+    @keyframes brutal-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .animate-pulse-highlight {
+      animation: brutal-pulse 2.2s ease-in-out infinite;
+    }
+
+    /* Button Wiggle on Hover */
+    @keyframes brutal-wiggle {
+      0%, 100% { transform: translate(-3px, -3px) rotate(0deg); }
+      25% { transform: translate(-3px, -3px) rotate(-1.5deg); }
+      75% { transform: translate(-3px, -3px) rotate(1.5deg); }
+    }
+    .btn-wiggle:hover {
+      animation: brutal-wiggle 0.3s ease-in-out infinite alternate;
+    }
+
+    /* Infinite marquee animation */
+    @keyframes marquee-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee-left {
+      display: flex;
+      width: 200%;
+      animation: marquee-left 25s linear infinite;
+    }
+    .marquee-container:hover .animate-marquee-left {
+      animation-play-state: paused;
+    }
+
+    /* Rubber stamp style */
+    .stamp-badge {
+      display: inline-block;
+      border: 3px dashed #0D0D0D;
+      padding: 4px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transform: rotate(-3deg);
+      transition: transform 0.2s ease;
+    }
+    .stamp-badge:hover {
+      transform: rotate(0deg) scale(1.05);
+    }
+
+    /* ================================================================= */
+    /* TRANSLATION PIPELINE SIMULATION STYLES (COMPACT FIT-IN-FRAME)     */
+    /* ================================================================= */
+    .brutal-border {
+      border: 2px solid #000;
+    }
+    .brutal-border-sm {
+      border: 1.5px solid #000;
+    }
+    .sim-card {
+      position: relative;
+      width: 100%;
+      background-color: #fafafa;
+      box-shadow: 4px 4px 0px 0px #000;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+        linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none;
+    }
+    .sim-play-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      background-color: #22c55e;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px 0px #000;
+      transition: transform 0.08s ease;
+      z-index: 20;
+    }
+    .sim-play-btn:hover {
+      transform: translate(-1px, -1px);
+    }
+    .sim-play-btn:active {
+      transform: translate(0, 0);
+    }
+    .sim-badge {
+      position: absolute;
+      z-index: 10;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      pointer-events: none;
+      box-shadow: 1.5px 1.5px 0px 0px #000;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .src-badge {
+      background-color: #a855f7;
+      color: #ffffff;
+      left: 7%;
+      top: 14%;
+    }
+    .hub-badge {
+      background-color: #eab308;
+      color: #000000;
+      left: 50%;
+      top: 10%;
+      transform: translateX(-50%);
+      box-shadow: 2px 2px 0px 0px #000;
+      animation: hubBounce 2.5s infinite;
+    }
+    @keyframes hubBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-4px); }
+    }
+    .out-badge {
+      background-color: #06b6d4;
+      color: #000000;
+      right: 7%;
+      top: 14%;
+    }
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 612 / 280;
+      min-height: 200px;
+    }
+    svg.pipeline-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      position: relative;
+      z-index: 0;
+    }
+    .transcript-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #3b82f6;
+      border-top: 2px solid #000;
+      padding: 6px 10px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .transcript-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-size: 11px;
+    }
+    @media (max-width: 640px) {
+      .transcript-grid {
+        grid-template-columns: 1fr;
+      }
+      .sim-badge {
+        font-size: 8px;
+        padding: 1px 4px;
+      }
+      .src-badge { left: 3%; top: 10%; }
+      .hub-badge { left: 50%; top: 8%; }
+      .out-badge { right: 3%; top: 10%; }
+      .canvas-container { min-height: 190px; aspect-ratio: 612 / 280; }
+    }
+    .transcript-pill {
+      border: 1.5px solid #000;
+      padding: 3px 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-shadow: 1.5px 1.5px 0px 0px #000;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+    .pill-src {
+      background-color: #ffffff;
+      font-weight: 700;
+    }
+    .pill-out {
+      background-color: #fef08a;
+      font-weight: 900;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .metric-card {
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 2px 2px 0px 0px #000;
+    }
+    .metric-latency { background-color: #ff007f; color: #ffffff; }
+    .metric-accuracy { background-color: #00f5d4; color: #000000; }
+    .metric-bitrate { background-color: #7b2cbf; color: #ffffff; }
+
+    .metric-header {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .metric-val {
+      font-size: 17px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1;
+    }
+
+    /* Sliders Grid */
+    .sliders-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 0;
+    }
+    .slider-box {
+      background-color: #fafafa;
+      padding: 7px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      box-shadow: 2px 2px 0px 0px #000;
+    }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .range-wrap {
+      position: relative;
+      flex-grow: 1;
+      height: 18px;
+      display: flex;
+      align-items: center;
+    }
+    .sliders-grid input[type=range] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      background: transparent;
+      outline: none;
+      position: absolute;
+      z-index: 5;
+      cursor: pointer;
+      margin: 0;
+    }
+    .sliders-grid input[type=range]::-webkit-slider-runnable-track {
+      height: 10px;
+      background: transparent;
+    }
+    .sliders-grid input[type=range]::-moz-range-track {
+      height: 10px;
+      background: transparent;
+    }
+    .sliders-grid input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border: 1.5px solid #000000;
+      box-shadow: 1px 1px 0px 0px #000000;
+      cursor: pointer;
+      margin-top: -2px;
+      transition: transform 0.05s;
+    }
+    .sliders-grid input[type=range]:active::-webkit-slider-thumb {
+      transform: scale(1.15);
+    }
+    .sliders-grid input[type=range]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border: 1.5px solid #000000;
+      box-shadow: 1px 1px 0px 0px #000000;
+      cursor: pointer;
+    }
+    .track-visual {
+      position: absolute;
+      width: 100%;
+      height: 10px;
+      background-color: #000000;
+      border: 1.5px solid #000000;
+      pointer-events: none;
+    }
+    .track-fill {
+      height: 100%;
+      width: 50%;
+    }
+    .fill-cyan { background-color: #00f5d4; }
+    .fill-pink { background-color: #ff007f; }
+    .slider-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      background-color: #000000;
+      color: #ffffff;
+      padding: 2px 4px;
+      min-width: 44px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+
+  <!-- ================================================================= -->
+  <!-- 1. TOP MARQUEE STATUS BAR                                         -->
+  <!-- ================================================================= -->
+  <div class="bg-neo-yellow border-b-[3px] border-neo-black py-1.5 overflow-hidden select-none font-mono text-xs font-bold uppercase tracking-wider marquee-container">
+    <div class="animate-marquee-left flex items-center space-x-6">
+      <span class="inline-flex items-center gap-2"><span class="w-2.5 h-2.5 bg-neo-lime rounded-full border border-black animate-ping"></span> CHROME EXTENSION LIVE</span>
+      <span>✦</span>
+      <span>THEY SPEAK THEIR LANGUAGE • YOU HEAR IT IN YOURS</span>
+      <span>✦</span>
+      <span>DESIGNED FOR ZOOM, GOOGLE MEET &amp; MICROSOFT TEAMS</span>
+      <span>✦</span>
+      <span>80 LANGUAGES &amp; REGIONAL SCRIPTS SUPPORTED</span>
+      <span>✦</span>
+      <span>LESS LATENCY &amp; FAR MORE VALUE FOR MONEY THAN HUMAN INTERPRETERS</span>
+      <span>✦</span>
+      <span>FIRST-TIME SIGNUP: 20 FREE MINUTES</span>
+      <span>✦</span>
+      <span>ROADMAP: BPO TELEPHONY PHONE BRIDGE (PHASE 2)</span>
+      <span>✦</span>
+      <!-- Loop duplicate -->
+      <span class="inline-flex items-center gap-2"><span class="w-2.5 h-2.5 bg-neo-lime rounded-full border border-black"></span> CHROME EXTENSION LIVE</span>
+      <span>✦</span>
+      <span>THEY SPEAK THEIR LANGUAGE • YOU HEAR IT IN YOURS</span>
+      <span>✦</span>
+      <span>DESIGNED FOR ZOOM, GOOGLE MEET &amp; MICROSOFT TEAMS</span>
+      <span>✦</span>
+      <span>80 LANGUAGES &amp; REGIONAL SCRIPTS SUPPORTED</span>
+      <span>✦</span>
+      <span>LESS LATENCY &amp; FAR MORE VALUE FOR MONEY THAN HUMAN INTERPRETERS</span>
+      <span>✦</span>
+      <span>FIRST-TIME SIGNUP: 20 FREE MINUTES</span>
+      <span>✦</span>
+      <span>ROADMAP: BPO TELEPHONY PHONE BRIDGE (PHASE 2)</span>
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- 2. STICKY NEOBRUTALIST HEADER                                     -->
+  <!-- ================================================================= -->
+  <header class="sticky top-0 z-50 bg-neo-paper border-b-[3px] border-neo-black backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-12 h-12 bg-neo-lime border-[3px] border-neo-black shadow-brutal-sm flex items-center justify-center font-mono font-black text-2xl group-hover:bg-neo-yellow transition-colors">
+          TG
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="text-2xl font-black tracking-tight uppercase">TRANSLATIGO</span>
+            <span class="bg-neo-coral text-white font-mono text-[10px] font-extrabold px-1.5 py-0.5 border border-neo-black shadow-[2px_2px_0px_#000]">.COM</span>
+          </div>
+          <span class="text-[11px] font-mono font-bold text-gray-700 tracking-wider">AI VOICE-TO-VOICE INTERPRETER</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center space-x-7 font-bold text-sm uppercase tracking-wide">
+        <a href="#extension" class="hover:bg-neo-yellow px-2 py-1 border-2 border-transparent hover:border-black transition-all">Chrome Extension</a>
+        <a href="#simulator" class="hover:bg-neo-cyan px-2 py-1 border-2 border-transparent hover:border-black transition-all">Live Demo</a>
+        <a href="#languages" class="hover:bg-neo-lime px-2 py-1 border-2 border-transparent hover:border-black transition-all">80 Languages</a>
+        <a href="#comparison" class="hover:bg-neo-yellow px-2 py-1 border-2 border-transparent hover:border-black transition-all">Vs Humans</a>
+        <a href="#pricing" class="hover:bg-neo-coral hover:text-white px-2 py-1 border-2 border-transparent hover:border-black transition-all">Pricing</a>
+        <a href="#roadmap" class="hover:bg-neo-purple px-2 py-1 border-2 border-transparent hover:border-black transition-all">Roadmap</a>
+        <a href="#faq" class="hover:bg-neo-yellow px-2 py-1 border-2 border-transparent hover:border-black transition-all">FAQ</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <a href="#pricing" class="btn-brutal bg-white px-3 sm:px-4 py-2 text-xs sm:text-sm hidden sm:inline-flex">
+          Free 20 Mins
+        </a>
+        <a href="#extension" class="btn-brutal bg-neo-yellow px-4 sm:px-6 py-2.5 text-xs sm:text-sm">
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29L1.931 5.47zM20.047 7.636A5.449 5.449 0 0 1 16.545 12c0 2.016-1.09 3.777-2.723 4.727l3.954 6.848C21.579 20.824 24 16.697 24 12c0-1.528-.286-2.99-.809-4.336L20.047 7.636zM12 8.727a3.273 3.273 0 1 0 0 6.546 3.273 3.273 0 0 0 0-6.546z"/>
+            </svg>
+            Add to Chrome
+          </span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================================================================= -->
+  <!-- 3. HERO SECTION                                                   -->
+  <!-- ================================================================= -->
+  <section class="relative pt-12 pb-20 overflow-hidden border-b-[3px] border-neo-black bg-neo-paper">
+    
+    <!-- Floating Brutalist Stickers -->
+    <div class="hidden lg:block absolute top-10 right-12 z-10">
+      <div class="bg-neo-cyan border-[3px] border-neo-black shadow-brutal p-3 font-mono text-xs font-black animate-float">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="w-3 h-3 bg-white border border-black rounded-full animate-ping"></span>
+          <span>80 LANGUAGES</span>
+        </div>
+        <p class="text-[11px] font-normal leading-tight">Global dialects &amp; regional scripts.</p>
+      </div>
+    </div>
+
+    <div class="hidden lg:block absolute bottom-12 left-10 z-10">
+      <div class="bg-neo-lime border-[3px] border-neo-black shadow-brutal p-3 font-mono text-xs font-black animate-float-alt">
+        <span class="bg-black text-white px-1.5 py-0.5 mr-1 text-[10px]">LESS LATENCY</span>
+        WAY MORE VALUE FOR MONEY
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-4xl mx-auto">
+        
+        <!-- Live Extension Status Pill -->
+        <div class="inline-flex items-center gap-2 mb-6 bg-white border-[3px] border-neo-black shadow-brutal px-4 py-1.5">
+          <span class="w-3 h-3 rounded-full bg-neo-lime border border-black animate-pulse"></span>
+          <span class="font-mono text-xs sm:text-sm font-black tracking-wide uppercase">AI Voice Interpreter Chrome Extension</span>
+          <span class="bg-neo-yellow text-black font-mono text-[10px] font-extrabold px-1.5 py-0.5 border border-black">20 FREE MINS</span>
+        </div>
+
+        <!-- Main Headline -->
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[1.05] text-neo-black mb-6">
+          They Speak Their Language. <br/>
+          <span class="inline-block bg-neo-yellow px-3 py-1 border-[3px] border-neo-black shadow-brutal -rotate-1 mt-2">
+            You Hear It In Yours.
+          </span><br/>
+          <span class="text-neo-coral underline decoration-neo-black decoration-4">Voice-to-Voice.</span> On Every Video Call.
+        </h1>
+
+        <p class="text-lg sm:text-xl font-medium text-gray-900 max-w-2xl mx-auto mb-8 leading-relaxed">
+          The real-time AI interpreter Chrome extension for <strong>Google Meet, Zoom, Microsoft Teams</strong>, and web calls. Supporting 80 languages with less latency and far more value for money than hiring human interpreters.
+        </p>
+
+        <!-- CTA Cluster -->
+        <div class="flex flex-wrap items-center justify-center gap-4 mb-10">
+          <a href="#extension" class="btn-brutal bg-neo-yellow hover:bg-neo-lime text-neo-black px-8 py-4 text-base sm:text-lg flex items-center gap-3 btn-wiggle">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29L1.931 5.47zM20.047 7.636A5.449 5.449 0 0 1 16.545 12c0 2.016-1.09 3.777-2.723 4.727l3.954 6.848C21.579 20.824 24 16.697 24 12c0-1.528-.286-2.99-.809-4.336L20.047 7.636zM12 8.727a3.273 3.273 0 1 0 0 6.546 3.273 3.273 0 0 0 0-6.546z"/>
+            </svg>
+            Add To Chrome (20 Free Mins)
+          </a>
+          <a href="#languages" class="btn-brutal bg-white hover:bg-neo-cyan px-7 py-4 text-base sm:text-lg">
+            🌍 Explore 80 Languages
+          </a>
+        </div>
+
+        <!-- Platform Badges Target Cluster -->
+        <div id="platforms" class="pt-4 border-t-2 border-black max-w-3xl mx-auto">
+          <span class="font-mono text-xs font-black uppercase text-gray-600 block mb-3">Instant Real-Time Audio Interpretation Across:</span>
+          <div class="flex flex-wrap items-center justify-center gap-3 font-mono text-xs font-bold">
+            <span class="bg-white border-2 border-black px-3 py-1.5 shadow-brutal-sm flex items-center gap-1.5">
+              🎥 Google Meet
+            </span>
+            <span class="bg-white border-2 border-black px-3 py-1.5 shadow-brutal-sm flex items-center gap-1.5">
+              💻 Zoom Web
+            </span>
+            <span class="bg-white border-2 border-black px-3 py-1.5 shadow-brutal-sm flex items-center gap-1.5">
+              👥 Microsoft Teams
+            </span>
+            <span class="bg-white border-2 border-black px-3 py-1.5 shadow-brutal-sm flex items-center gap-1.5">
+              💬 Discord &amp; Slack Calls
+            </span>
+            <span class="bg-neo-yellow border-2 border-black px-3 py-1.5 shadow-brutal-sm flex items-center gap-1.5">
+              🌐 Any Browser Video Call
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- 4. CHROME EXTENSION SHOWCASE & VALUE FOR MONEY                    -->
+  <!-- ================================================================= -->
+  <section id="extension" class="py-20 bg-neo-yellow border-b-[3px] border-neo-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Column: Extension Features -->
+        <div class="lg:col-span-6 reveal-item">
+          <div class="inline-block bg-black text-white font-mono text-xs font-bold px-2 py-1 uppercase mb-3">
+            AVAILABLE NOW ON CHROME
+          </div>
+          <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mb-6">
+            Less Latency. Far More Value For Money.
+          </h2>
+          <p class="text-base font-medium text-gray-800 leading-relaxed mb-6">
+            Human interpreters charge hundreds of dollars per hour, require booking days in advance, and force unnatural pauses after every sentence. Translatigo streams speech-to-speech with minimal latency right inside Chrome across 80 languages at a fraction of the cost.
+          </p>
+
+          <div class="space-y-4 font-mono text-xs font-bold mb-8">
+            <div class="bg-white border-2 border-black p-3.5 shadow-brutal-sm flex items-start gap-3">
+              <span class="w-6 h-6 bg-neo-lime border border-black flex items-center justify-center text-sm font-black flex-shrink-0">✓</span>
+              <div>
+                <span class="text-sm font-black uppercase block">Significantly Less Latency Than Humans</span>
+                <span class="font-normal text-gray-700">No waiting 5 to 10 seconds for a human to take notes and restate sentences. Audio translates continuously in real-time.</span>
+              </div>
+            </div>
+
+            <div class="bg-white border-2 border-black p-3.5 shadow-brutal-sm flex items-start gap-3">
+              <span class="w-6 h-6 bg-neo-lime border border-black flex items-center justify-center text-sm font-black flex-shrink-0">✓</span>
+              <div>
+                <span class="text-sm font-black uppercase block">Unmatched Value For Money</span>
+                <span class="font-normal text-gray-700">Get hundreds of minutes for less than the cost of a single 15-minute human interpreter session.</span>
+              </div>
+            </div>
+
+            <div class="bg-white border-2 border-black p-3.5 shadow-brutal-sm flex items-start gap-3">
+              <span class="w-6 h-6 bg-neo-lime border border-black flex items-center justify-center text-sm font-black flex-shrink-0">✓</span>
+              <div>
+                <span class="text-sm font-black uppercase block">80 Languages Ready Out-Of-The-Box</span>
+                <span class="font-normal text-gray-700">From major languages (English, Spanish, Mandarin, Japanese) to Akan, Amharic, Georgian, and Zulu.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-4">
+            <button onclick="alert('Redirecting to Chrome Web Store... Install Translatigo and get 20 free welcome minutes!')" class="btn-brutal bg-neo-black text-white hover:bg-neo-lime hover:text-black px-7 py-3.5 text-sm sm:text-base btn-wiggle">
+              🚀 Install Chrome Extension
+            </button>
+            <span class="font-mono text-xs font-bold text-gray-800">
+              ⭐️ 4.9/5 Rating • 1-Click Setup
+            </span>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Browser Extension Mockup -->
+        <div class="lg:col-span-6 reveal-item">
+          <div class="card-brutal bg-white p-0 overflow-hidden shadow-brutal-xl">
+            
+            <!-- Browser Address Bar Mockup -->
+            <div class="bg-neo-paper border-b-2 border-black p-3 flex items-center justify-between font-mono text-xs">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-red-500 border border-black"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-500 border border-black"></span>
+                <span class="w-3 h-3 rounded-full bg-green-500 border border-black"></span>
+                <span class="bg-white border border-black px-3 py-1 font-bold truncate max-w-[240px]">
+                  meet.google.com/tokyo-sync
+                </span>
+              </div>
+              <div class="flex items-center gap-1.5 bg-neo-lime px-2 py-0.5 border border-black font-black">
+                <span>ACTIVE CALL</span>
+              </div>
+            </div>
+
+            <!-- Extension Popup Inside Window -->
+            <div class="p-6 bg-[#FAF7ED]">
+              <div class="card-brutal bg-white p-5 border-2 border-black shadow-brutal">
+                
+                <div class="flex items-center justify-between pb-3 border-b-2 border-black mb-4">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 bg-neo-lime border border-black flex items-center justify-center font-black text-xs">
+                      TG
+                    </div>
+                    <div>
+                      <h4 class="font-black text-sm uppercase">Translatigo Live</h4>
+                      <p class="font-mono text-[10px] text-gray-600">CHROME EXTENSION POPUP</p>
+                    </div>
+                  </div>
+                  <span class="bg-neo-yellow border border-black font-mono text-[10px] font-black px-2 py-0.5">
+                    CREDITS: 20 MINS (FIRST-TIME TRIAL)
+                  </span>
+                </div>
+
+                <!-- Two-Way Mode Toggle -->
+                <div class="grid grid-cols-2 gap-2 mb-4 font-mono text-xs font-bold">
+                  <div class="bg-neo-paper border-2 border-black p-2 text-center">
+                    <span class="text-gray-500 text-[10px] block">THEY SPEAK</span>
+                    <span class="text-black font-black">🇯🇵 Japanese</span>
+                  </div>
+                  <div class="bg-neo-cyan/20 border-2 border-black p-2 text-center">
+                    <span class="text-gray-500 text-[10px] block">YOU HEAR</span>
+                    <span class="text-black font-black">🇺🇸 English</span>
+                  </div>
+                </div>
+
+                <!-- Active Live Speech Visualizer Box -->
+                <div class="bg-white border-2 border-black p-3 mb-4 shadow-brutal-sm">
+                  <div class="flex items-center justify-between font-mono text-[10px] font-bold text-gray-500 mb-1">
+                    <span>LIVE SPEECH TRANSLATION:</span>
+                    <span class="text-neo-coral font-black">LOW LATENCY STREAM</span>
+                  </div>
+                  <p class="text-xs font-bold text-neo-coral leading-snug">
+                    「サーバーのフェイルオーバーが完了しました。東京側は準備完了です。」
+                  </p>
+                  <p class="text-xs font-bold text-black leading-snug mt-1.5">
+                    "The server failover is complete. The Tokyo team is ready to proceed."
+                  </p>
+                </div>
+
+                <div class="flex items-center justify-between pt-2 border-t-2 border-black">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-neo-lime animate-ping"></span>
+                    <span class="font-mono text-xs font-bold">Interpreting Tab Audio...</span>
+                  </div>
+                  <button class="btn-brutal bg-neo-coral text-white text-xs px-3 py-1">
+                    Pause
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- 5. INTERACTIVE LIVE VOICE-TO-VOICE SIMULATOR                      -->
+  <!-- ================================================================= -->
+  <section id="simulator" class="py-8 sm:py-10 bg-neo-paper border-b-[3px] border-neo-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal-item">
+      
+      <!-- Window Frame Title Bar -->
+      <div class="card-brutal bg-neo-black text-white p-2 sm:p-2.5 flex items-center justify-between border-b-0 rounded-none">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-neo-coral border border-white"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-neo-yellow border border-white"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-neo-lime border border-white"></span>
+          <span class="font-mono text-xs font-bold tracking-widest ml-1 sm:ml-2 uppercase">CHROME EXTENSION AUDIO ENGINE :: TRANSLATION PIPELINE SIMULATOR</span>
+        </div>
+        <div class="flex items-center gap-3 font-mono text-xs">
+          <span class="inline-flex items-center gap-1.5 bg-neo-lime text-neo-black font-bold px-2 py-0.5 text-[10px]">
+            <span class="w-1.5 h-1.5 rounded-full bg-black animate-ping"></span> TAB AUDIO STREAM: ACTIVE
+          </span>
+        </div>
+      </div>
+
+      <!-- Main Interactive Simulator Window -->
+      <div class="card-brutal bg-white p-4 sm:p-5 border-t-0 shadow-brutal">
+        
+        <!-- Scenario & Channel Selector Bar (Single Ultra-Compact Row) -->
+        <div class="mb-3.5 flex flex-col md:flex-row md:items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="font-mono text-[10px] font-black uppercase text-gray-500 mr-0.5">Channels:</span>
+            <div class="flex flex-wrap gap-1" id="channel-buttons">
+              <button onclick="setChannel(0)" class="channel-btn brutal-border-sm text-[11px] px-2 py-0.5" data-channel="0">🇺🇸 EN ➔ 🇪🇸 ES</button>
+              <button onclick="setChannel(1)" class="channel-btn brutal-border-sm text-[11px] px-2 py-0.5" data-channel="1">🇯🇵 JA ➔ 🇺🇸 EN</button>
+              <button onclick="setChannel(2)" class="channel-btn brutal-border-sm text-[11px] px-2 py-0.5 active" data-channel="2">🇫🇷 FR ➔ 🇩🇪 DE</button>
+            </div>
+            <span class="hidden sm:inline font-mono text-gray-300 mx-0.5">|</span>
+            <span class="font-mono text-[10px] font-black uppercase text-gray-500 mr-0.5">Presets:</span>
+            <div class="flex flex-wrap gap-1" id="scenario-buttons">
+              <button onclick="setScenario('support')" class="scenario-btn btn-brutal bg-white text-[10px] px-1.5 py-0.5" data-id="support">🚨 Tokyo Outage</button>
+              <button onclick="setScenario('hotel')" class="scenario-btn btn-brutal bg-white text-[10px] px-1.5 py-0.5" data-id="hotel">🏨 Concierge</button>
+              <button onclick="setScenario('medical')" class="scenario-btn btn-brutal bg-white text-[10px] px-1.5 py-0.5" data-id="medical">🩺 Medical</button>
+              <button onclick="setScenario('sales')" class="scenario-btn btn-brutal bg-white text-[10px] px-1.5 py-0.5" data-id="sales">💼 Enterprise</button>
+            </div>
+          </div>
+
+          <!-- Volume / Audio Playback Status -->
+          <div class="flex items-center gap-2 bg-neo-paper border border-black px-2 py-0.5 font-mono text-[11px] shadow-[1px_1px_0px_#000] self-start md:self-auto">
+            <span id="audio-engine-label" class="text-[10px]">🔊 Synth: <strong class="text-neo-coral">Ready</strong></span>
+            <button onclick="toggleMute()" id="mute-btn" class="bg-neo-black text-white px-1.5 py-0.2 text-[9px] font-bold">
+              MUTE: OFF
+            </button>
+          </div>
+        </div>
+
+        <!-- TWO-COLUMN DASHBOARD (LEFT: Pipeline & Telemetry, RIGHT: Audio Bridge & Controls) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 items-stretch">
+          
+          <!-- LEFT COLUMN: Animated SVG Pipeline & Telemetry Metrics -->
+          <div class="flex flex-col justify-between">
+            
+            <!-- SIMULATION CANVAS (The user's SVG pipeline) -->
+            <div class="sim-card brutal-border">
+              <div class="grid-bg"></div>
+
+              <!-- Play / Pause Toggle Button -->
+              <button id="playToggle" class="sim-play-btn brutal-border-sm" aria-label="Toggle simulation">
+                <svg id="playIcon" style="display:none;" width="16" height="16" viewBox="0 0 24 24" fill="#000" stroke="#000" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <svg id="pauseIcon" width="14" height="14" viewBox="0 0 24 24" fill="#000" stroke="#000" stroke-width="2">
+                  <rect x="6" y="4" width="4" height="16"></rect>
+                  <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+              </button>
+
+              <div class="canvas-container">
+                <!-- Badges -->
+                <div id="srcBadge" class="sim-badge src-badge brutal-border-sm">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" x2="12" y1="19" y2="22"></line>
+                  </svg>
+                  <span id="srcBadgeText">🇫🇷 French</span>
+                </div>
+
+                <div class="sim-badge hub-badge brutal-border-sm">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                    <rect x="9" y="9" width="6" height="6"></rect>
+                    <path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"></path>
+                  </svg>
+                  <span>TRANSLATIGO</span>
+                </div>
+
+                <div id="outBadge" class="sim-badge out-badge brutal-border-sm">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  </svg>
+                  <span id="outBadgeText">🇩🇪 German</span>
+                </div>
+
+                <!-- SVG Pipeline Graphics -->
+                <svg viewBox="0 0 612 340" class="pipeline-svg">
+                  <!-- Center Reference Line -->
+                  <line x1="0" y1="153" x2="612" y2="153" stroke="#000000" stroke-width="2" stroke-dasharray="6 6" opacity="0.3"></line>
+
+                  <!-- Hub Aura -->
+                  <circle id="hubAura" cx="306" cy="153" r="55.08" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="4 4" opacity="0.4"></circle>
+
+                  <!-- Connection Pipelines -->
+                  <path d="M 134.64 153 L 306 153" fill="none" stroke="#000000" stroke-width="3" stroke-dasharray="8 8"></path>
+                  <path d="M 306 153 L 477.36 153" fill="none" stroke="#000000" stroke-width="3" stroke-dasharray="8 8"></path>
+
+                  <!-- Source Node & Animated Sine Wave -->
+                  <circle cx="134.64" cy="153" r="27.54" fill="#ec4899" stroke="#000000" stroke-width="3"></circle>
+                  <path id="leftWave" d="" fill="none" stroke="#000000" stroke-width="3.5" stroke-linecap="square"></path>
+
+                  <!-- Destination Node & Sine Wave -->
+                  <circle cx="477.36" cy="153" r="27.54" fill="#10b981" stroke="#000000" stroke-width="3"></circle>
+                  <path id="rightWave" d="" fill="none" stroke="#000000" stroke-width="3.5" stroke-linecap="square"></path>
+
+                  <!-- Traveling Packets -->
+                  <g id="packetsGroup">
+                    <rect class="packet" width="10" height="10" fill="#3b82f6" stroke="#000000" stroke-width="2"></rect>
+                    <rect class="packet" width="10" height="10" fill="#3b82f6" stroke="#000000" stroke-width="2"></rect>
+                    <rect class="packet" width="10" height="10" fill="#3b82f6" stroke="#000000" stroke-width="2"></rect>
+                    <rect class="packet" width="10" height="10" fill="#eab308" stroke="#000000" stroke-width="2"></rect>
+                  </g>
+
+                  <!-- Rotating Center Cube (HUB) -->
+                  <rect id="hubOuter" x="284" y="131" width="44" height="44" fill="#ffffff" stroke="#000000" stroke-width="3"></rect>
+                  <rect id="hubInner" x="296" y="143" width="20" height="20" fill="#000000"></rect>
+                </svg>
+
+                <!-- Transcription Banner -->
+                <div class="transcript-bar">
+                  <div class="transcript-grid">
+                    <div class="transcript-pill pill-src">
+                      <span style="color:#ef4444; margin-right:4px;">SRC:</span>
+                      <span id="srcTextVal">“Profitez d'une communication claire et instantanée.”</span>
+                    </div>
+                    <div class="transcript-pill pill-out">
+                      <span style="color:#6b21a8; margin-right:4px;">OUT:</span>
+                      <span id="outTextVal">“Genießen Sie eine klare und sofortige Kommunikation.”</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- METRICS ROW & DSP SLIDERS -->
+            <div class="space-y-1.5">
+              <!-- Metrics Grid -->
+              <div class="metrics-grid">
+                <div class="metric-card metric-latency brutal-border">
+                  <div class="metric-header">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    <span>Latency</span>
+                  </div>
+                  <span id="metricLatency" class="metric-val">66.8ms</span>
+                </div>
+
+                <div class="metric-card metric-accuracy brutal-border">
+                  <div class="metric-header">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                      <path d="m9 12 2 2 4-4"></path>
+                    </svg>
+                    <span>Accuracy</span>
+                  </div>
+                  <span id="metricAccuracy" class="metric-val">94.7%</span>
+                </div>
+
+                <div class="metric-card metric-bitrate brutal-border">
+                  <div class="metric-header">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                    </svg>
+                    <span>Bitrate</span>
+                  </div>
+                  <span id="metricBitrate" class="metric-val">114kbps</span>
+                </div>
+              </div>
+
+              <!-- DSP Sliders -->
+              <div class="sliders-grid">
+                <!-- Buffer Window -->
+                <div class="slider-box brutal-border-sm">
+                  <div class="font-mono text-[9px] font-black uppercase tracking-wider text-gray-700">BUFFER WINDOW</div>
+                  <div class="slider-row">
+                    <div class="range-wrap">
+                      <div class="track-visual">
+                        <div id="bufferFill" class="track-fill fill-cyan"></div>
+                      </div>
+                      <input type="range" id="bufferSlider" min="20" max="100" value="61">
+                    </div>
+                    <span id="bufferValueText" class="slider-badge">61ms</span>
+                  </div>
+                </div>
+
+                <!-- Noise Floor -->
+                <div class="slider-box brutal-border-sm">
+                  <div class="font-mono text-[9px] font-black uppercase tracking-wider text-gray-700">NOISE FLOOR</div>
+                  <div class="slider-row">
+                    <div class="range-wrap">
+                      <div class="track-visual">
+                        <div id="noiseFill" class="track-fill fill-pink"></div>
+                      </div>
+                      <input type="range" id="noiseSlider" min="5" max="50" value="29">
+                    </div>
+                    <span id="noiseValueText" class="slider-badge">29dB</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: Two-Way Live Audio Bridge & Controls -->
+          <div class="flex flex-col justify-between gap-3 h-full">
+            
+            <!-- Caller 1: They Speak (Column A) -->
+            <div class="card-brutal bg-neo-paper p-3.5 sm:p-4 flex flex-col justify-between border-2 border-black">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-6 h-6 rounded-none bg-neo-yellow border-2 border-black flex items-center justify-center font-bold text-xs">
+                      A
+                    </div>
+                    <div>
+                      <h3 class="font-black text-xs uppercase leading-none">Column A: They Speak</h3>
+                      <p class="font-mono text-[9px] text-gray-500 leading-tight">INPUT AUDIO IN TAB</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-1.5">
+                    <select id="source-lang-select" onchange="updateLanguagePairs('source')" class="font-mono text-[11px] font-bold bg-white border border-black px-1.5 py-0.5 shadow-[1px_1px_0px_#000] focus:outline-none cursor-pointer">
+                      <option value="en">🇺🇸 English</option>
+                      <option value="es">🇪🇸 Spanish</option>
+                      <option value="ja">🇯🇵 Japanese</option>
+                      <option value="fr" selected>🇫🇷 French</option>
+                      <option value="de">🇩🇪 German</option>
+                      <option value="zh">🇨🇳 Chinese</option>
+                      <option value="pt">🇧🇷 Portuguese</option>
+                      <option value="hi">🇮🇳 Hindi</option>
+                      <option value="it">🇮🇹 Italian</option>
+                      <option value="ru">🇷🇺 Russian</option>
+                      <option value="ko">🇰🇷 Korean</option>
+                      <option value="ar">🇸🇦 Arabic</option>
+                      <option value="nl">🇳🇱 Dutch</option>
+                      <option value="tr">🇹🇷 Turkish</option>
+                      <option value="vi">🇻🇳 Vietnamese</option>
+                      <option value="id">🇮🇩 Indonesian</option>
+                      <option value="pl">🇵🇱 Polish</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="bg-white border border-black p-2.5 shadow-[1px_1px_0px_#000] focus-within:shadow-[2px_2px_0px_#000] transition-all">
+                  <div class="flex items-center justify-between text-[9px] font-mono font-bold text-gray-500 mb-1.5">
+                    <span class="text-neo-black font-bold">✏️ TYPE HERE (EDITABLE):</span>
+                    <button type="button" onclick="playSimulation('caller')" class="hover:bg-neo-yellow px-1.5 py-0.5 border border-black text-[9px] font-mono font-bold bg-gray-50 flex items-center gap-1 shadow-[1px_1px_0px_#000]" title="Listen to original spoken audio">
+                      🔊 Listen Original
+                    </button>
+                  </div>
+                  <textarea id="caller-speech-text" rows="3" oninput="handleSourceInput()" class="w-full text-xs font-bold text-neo-black leading-snug bg-transparent border-0 focus:outline-none resize-none p-0 font-sans" placeholder="Type or paste any sentence in Column A...">Profitez d'une communication claire et instantanée.</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Caller 2: You Hear In Yours (Column B) -->
+            <div class="card-brutal bg-neo-yellow/15 p-3.5 sm:p-4 flex flex-col justify-between border-2 border-black">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-6 h-6 rounded-none bg-neo-lime border-2 border-black flex items-center justify-center font-bold text-xs">
+                      B
+                    </div>
+                    <div>
+                      <h3 class="font-black text-xs uppercase leading-none">Column B: You Hear</h3>
+                      <p class="font-mono text-[9px] text-gray-500 leading-tight">SYNTHESIZED IN HEADSET</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-1.5">
+                    <select id="target-lang-select" onchange="updateLanguagePairs('target')" class="font-mono text-[11px] font-bold bg-white border border-black px-1.5 py-0.5 shadow-[1px_1px_0px_#000] focus:outline-none cursor-pointer">
+                      <option value="de" selected>🇩🇪 German</option>
+                      <option value="en">🇺🇸 English</option>
+                      <option value="es">🇪🇸 Spanish</option>
+                      <option value="ja">🇯🇵 Japanese</option>
+                      <option value="fr">🇫🇷 French</option>
+                      <option value="zh">🇨🇳 Chinese</option>
+                      <option value="pt">🇧🇷 Portuguese</option>
+                      <option value="hi">🇮🇳 Hindi</option>
+                      <option value="it">🇮🇹 Italian</option>
+                      <option value="ru">🇷🇺 Russian</option>
+                      <option value="ko">🇰🇷 Korean</option>
+                      <option value="ar">🇸🇦 Arabic</option>
+                      <option value="nl">🇳🇱 Dutch</option>
+                      <option value="tr">🇹🇷 Turkish</option>
+                      <option value="vi">🇻🇳 Vietnamese</option>
+                      <option value="id">🇮🇩 Indonesian</option>
+                      <option value="pl">🇵🇱 Polish</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="bg-gray-50 border border-black p-2.5 shadow-[1px_1px_0px_#000] transition-all relative">
+                  <div class="flex items-center justify-between text-[9px] font-mono font-bold text-gray-500 mb-1.5">
+                    <span class="text-neo-black font-bold">⚡ AUTO-TRANSLATED (READ-ONLY):</span>
+                    <span id="translation-status-badge" class="bg-neo-lime text-black px-1 py-0.2 border border-black font-bold text-[8px] font-mono">READY</span>
+                  </div>
+                  <textarea id="target-speech-text" rows="3" readonly class="w-full text-xs font-bold text-neo-black leading-snug bg-transparent border-0 focus:outline-none resize-none p-0 font-sans cursor-default select-text" placeholder="Translated text will appear here automatically...">Genießen Sie eine klare und sofortige Kommunikation.</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Controls (Bottom of Right Column) -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <div class="flex items-center gap-2">
+                <button onclick="playSimulation('target')" id="play-btn" class="btn-brutal bg-neo-lime text-black px-3.5 py-2 text-xs font-bold flex items-center gap-1.5 shadow-[2px_2px_0px_#000]">
+                  <span id="play-icon">▶</span>
+                  <span id="play-label">Simulate Voice Call &amp; Listen (Column B)</span>
+                </button>
+                <button onclick="swapLanguages()" class="btn-brutal bg-white px-3 py-2 text-xs font-bold shadow-[2px_2px_0px_#000]" title="Swap Directions">
+                  ⇄ Swap
+                </button>
+              </div>
+
+              <div class="font-mono text-[10px] font-bold text-gray-700 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-neo-coral"></span>
+                <span>Live Web Speech Audio</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- 6. COMPLETE 80-LANGUAGE DIRECTORY & EXPLORER                      -->
+  <!-- ================================================================= -->
+  <section id="languages" class="py-20 bg-neo-paper border-b-[3px] border-neo-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="stamp-badge bg-neo-lime mb-3">GLOBAL MULTILINGUAL COVERAGE</span>
+        <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mt-2">
+          80 Supported Languages &amp; Scripts
+        </h2>
+        <p class="text-base sm:text-lg font-medium text-gray-800 mt-4">
+          Complete support for 80 global languages and regional dialects. Search any language below:
+        </p>
+
+        <!-- Search & Filter Controls -->
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <input 
+            type="text" 
+            id="language-search" 
+            oninput="filterLanguages()" 
+            placeholder="Search language or dialect (e.g., Spanish, Japanese, Hindi, Zulu)..." 
+            class="w-full sm:w-96 px-4 py-3 bg-white border-[3px] border-black shadow-brutal-sm font-mono text-sm font-bold placeholder-gray-500 focus:outline-none focus:bg-yellow-50"
+          />
+          <div class="flex flex-wrap justify-center gap-2">
+            <button onclick="setRegionFilter('all')" class="region-filter-btn btn-brutal bg-neo-yellow text-xs px-3 py-2 active-region" data-region="all">All (80)</button>
+            <button onclick="setRegionFilter('europe')" class="region-filter-btn btn-brutal bg-white text-xs px-3 py-2" data-region="europe">Europe</button>
+            <button onclick="setRegionFilter('asia')" class="region-filter-btn btn-brutal bg-white text-xs px-3 py-2" data-region="asia">Asia-Pac</button>
+            <button onclick="setRegionFilter('americas')" class="region-filter-btn btn-brutal bg-white text-xs px-3 py-2" data-region="americas">Americas</button>
+            <button onclick="setRegionFilter('mea')" class="region-filter-btn btn-brutal bg-white text-xs px-3 py-2" data-region="mea">Africa / ME</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Languages Grid Container -->
+      <div id="languages-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 font-mono">
+      </div>
+
+      <div class="mt-8 text-center font-mono text-xs font-bold text-gray-700">
+        <span class="bg-white border-2 border-black px-4 py-2 inline-block shadow-brutal-sm">
+          All 80 languages are fully unlocked on the Chrome extension across all plans, including the Free Trial!
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- 7. WHY TRANSLATIGO IS FAR MORE VALUE FOR MONEY THAN HUMAN INTERPRETERS -->
+  <!-- ================================================================= -->
+  <section id="comparison" class="py-20 bg-[#FAF7ED] border-b-[3px] border-neo-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="stamp-badge bg-neo-coral text-white mb-3">THE REAL COST OF INTERPRETATION</span>
+        <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mt-2">
+          Why Translatigo Is Far More Value For Money Than Human Interpreters:
+        </h2>
+        <p class="text-base sm:text-lg font-medium text-gray-800 mt-4 leading-relaxed">
+          Traditional human interpreters charge high hourly fees, require booking days in advance, and create awkward 5–10 second conversational pauses. Translatigo streams continuous, real-time voice translation at less than 5% of the cost.
+        </p>
+      </div>
+
+      <!-- 3 Key Comparison Pillars (Cards) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        
+        <!-- Pillar 1: Cost Difference -->
+        <div class="card-brutal p-6 bg-white flex flex-col justify-between reveal-item">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono text-xs font-black bg-neo-lime px-2 py-0.5 border-2 border-black uppercase">
+                SAVINGS: 95%+
+              </span>
+              <span class="text-2xl">💰</span>
+            </div>
+            <h3 class="text-xl font-black uppercase mb-2">95%+ Cheaper Every Minute</h3>
+            <p class="text-xs text-gray-700 font-medium leading-relaxed mb-4">
+              Human interpreters charge <strong>$100 to $250+ per hour</strong> ($1.66 to $4.15 per minute) with strict 1–2 hour minimum commitments. Translatigo starts at just <strong>7¢ to 9¢ per minute</strong>.
+            </p>
+          </div>
+          <div class="bg-neo-yellow/30 border-2 border-black p-3 font-mono text-xs font-bold space-y-1">
+            <div class="flex justify-between text-red-700"><span>Humans:</span> <span>$1.66 – $4.15 / min</span></div>
+            <div class="flex justify-between text-black font-black"><span>Translatigo:</span> <span class="bg-neo-lime px-1 border border-black">7¢ – 9¢ / min</span></div>
+          </div>
+        </div>
+
+        <!-- Pillar 2: Conversational Latency -->
+        <div class="card-brutal p-6 bg-white flex flex-col justify-between reveal-item">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono text-xs font-black bg-neo-yellow px-2 py-0.5 border-2 border-black uppercase">
+                ZERO AWKWARD PAUSES
+              </span>
+              <span class="text-2xl">⚡</span>
+            </div>
+            <h3 class="text-xl font-black uppercase mb-2">Less Latency &amp; Faster Flow</h3>
+            <p class="text-xs text-gray-700 font-medium leading-relaxed mb-4">
+              In consecutive human interpretation, speakers must pause every sentence while the interpreter takes notes and repeats. Translatigo streams voice with minimal latency without interrupting dialogue.
+            </p>
+          </div>
+          <div class="bg-neo-yellow/30 border-2 border-black p-3 font-mono text-xs font-bold space-y-1">
+            <div class="flex justify-between text-red-700"><span>Humans:</span> <span>5–10s Wait Per Sentence</span></div>
+            <div class="flex justify-between text-black font-black"><span>Translatigo:</span> <span class="bg-neo-yellow px-1 border border-black">Live Voice Stream</span></div>
+          </div>
+        </div>
+
+        <!-- Pillar 3: On-Demand Availability -->
+        <div class="card-brutal p-6 bg-white flex flex-col justify-between reveal-item">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono text-xs font-black bg-neo-cyan px-2 py-0.5 border-2 border-black uppercase">
+                INSTANT LAUNCH
+              </span>
+              <span class="text-2xl">🌍</span>
+            </div>
+            <h3 class="text-xl font-black uppercase mb-2">80 Languages On Demand</h3>
+            <p class="text-xs text-gray-700 font-medium leading-relaxed mb-4">
+              Hiring human translators requires days of advance scheduling, contracts, and paperwork—for only 1 language pair. Translatigo launches in 1 click for 80 languages anytime in Chrome.
+            </p>
+          </div>
+          <div class="bg-neo-yellow/30 border-2 border-black p-3 font-mono text-xs font-bold space-y-1">
+            <div class="flex justify-between text-red-700"><span>Humans:</span> <span>Book Days Ahead (1 Pair)</span></div>
+            <div class="flex justify-between text-black font-black"><span>Translatigo:</span> <span class="bg-neo-cyan px-1 border border-black">1-Click (80 Languages)</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Comprehensive Side-by-Side Comparison Matrix Table -->
+      <div class="card-brutal bg-white overflow-hidden shadow-brutal-xl reveal-item">
+        
+        <!-- Table Header Bar -->
+        <div class="bg-neo-black text-white p-4 flex items-center justify-between">
+          <div class="font-mono text-xs font-black uppercase tracking-wider flex items-center gap-2">
+            <span class="w-3 h-3 bg-neo-yellow border border-white"></span>
+            <span>HEAD-TO-HEAD COMPARISON MATRIX</span>
+          </div>
+          <span class="bg-neo-coral text-white font-mono text-[10px] font-bold px-2 py-0.5 border border-white">
+            COMPARE THE FACTS
+          </span>
+        </div>
+
+        <!-- Responsive Table Container -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left font-mono text-xs border-collapse">
+            <thead>
+              <tr class="border-b-2 border-black bg-[#FAF7ED]">
+                <th class="p-4 font-black uppercase text-gray-700 w-1/3">Evaluation Metric</th>
+                <th class="p-4 font-black uppercase text-red-700 bg-red-50/70 w-1/3 border-l-2 border-r-2 border-black">
+                  ❌ Traditional Human Interpreter
+                </th>
+                <th class="p-4 font-black uppercase text-black bg-neo-yellow/40 w-1/3">
+                  ✅ Translatigo AI Extension
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y-2 divide-black">
+              
+              <!-- Row 1: Cost Per Minute -->
+              <tr class="hover:bg-yellow-50/50 transition-colors">
+                <td class="p-4 font-bold text-gray-900">
+                  <div class="font-black text-sm uppercase">Cost Per Minute</div>
+                  <span class="text-[11px] text-gray-600 font-normal">Actual cost incurred while speaking</span>
+                </td>
+                <td class="p-4 bg-red-50/40 text-red-800 font-bold border-l-2 border-r-2 border-black">
+                  <div class="text-sm font-black">$1.66 to $4.15 / min</div>
+                  <span class="text-[11px] text-red-600">Based on $100–$250/hr industry rate</span>
+                </td>
+                <td class="p-4 bg-neo-yellow/20 text-black font-black">
+                  <div class="text-sm font-black text-neo-coral">7¢ to 9¢ / min</div>
+                  <span class="text-[11px] text-gray-800 font-bold">From $18 for 200 mins (+ 20 mins free trial)</span>
+                </td>
+              </tr>
+
+              <!-- Row 2: Minimum Commitment -->
+              <tr class="hover:bg-yellow-50/50 transition-colors">
+                <td class="p-4 font-bold text-gray-900">
+                  <div class="font-black text-sm uppercase">Minimum Booking</div>
+                  <span class="text-[11px] text-gray-600 font-normal">Upfront commitment required</span>
+                </td>
+                <td class="p-4 bg-red-50/40 text-red-800 font-bold border-l-2 border-r-2 border-black">
+                  1 to 2 hours minimum ($150 – $500) even for a 10-minute call
+                </td>
+                <td class="p-4 bg-neo-yellow/20 text-black font-black">
+                  Zero minimum. First 20 minutes free, then top up as you need
+                </td>
+              </tr>
+
+              <!-- Row 3: Conversational Latency -->
+              <tr class="hover:bg-yellow-50/50 transition-colors">
+                <td class="p-4 font-bold text-gray-900">
+                  <div class="font-black text-sm uppercase">Conversational Latency</div>
+                  <span class="text-[11px] text-gray-600 font-normal">Wait time before hearing translation</span>
+                </td>
+                <td class="p-4 bg-red-50/40 text-red-800 font-bold border-l-2 border-r-2 border-black">
+                  High (5 to 10 second pause after each sentence spoken)
+                </td>
+                <td class="p-4 bg-neo-yellow/20 text-black font-black">
+                  Significantly Less Latency (Immediate speech-to-speech audio stream)
+                </td>
+              </tr>
+
+              <!-- Row 4: Scheduling & Availability -->
+              <tr class="hover:bg-yellow-50/50 transition-colors">
+                <td class="p-4 font-bold text-gray-900">
+                  <div class="font-black text-sm uppercase">Availability &amp; Setup</div>
+                  <span class="text-[11px] text-gray-600 font-normal">Time required to schedule</span>
+                </td>
+                <td class="p-4 bg-red-50/40 text-red-800 font-bold border-l-2 border-r-2 border-black">
+                  Days or weeks in advance; high cancellation &amp; rebooking fees
+                </td>
+                <td class="p-4 bg-neo-yellow/20 text-black font-black">
+                  Instant 1-click launch inside your active Google Meet, Zoom, or Teams tab
+                </td>
+              </tr>
+
+              <!-- Row 5: Language Flexibility -->
+              <tr class="hover:bg-yellow-50/50 transition-colors">
+                <td class="p-4 font-bold text-gray-900">
+                  <div class="font-black text-sm uppercase">Language Breadth</div>
+                  <span class="text-[11px] text-gray-600 font-normal">Multi-language capability</span>
+                </td>
+                <td class="p-4 bg-red-50/40 text-red-800 font-bold border-l-2 border-r-2 border-black">
+                  Strictly 1 language pair per hired human translator
+                </td>
+                <td class="p-4 bg-neo-yellow/20 text-black font-black">
+                  80 Languages and regional script variants in one Chrome extension
+                </td>
+              </tr>
+
+              <!-- Row 6: Meeting Privacy & Friction -->
+              <tr class="hover:bg-yellow-50/50 transition-colors">
+                <td class="p-4 font-bold text-gray-900">
+                  <div class="font-black text-sm uppercase">Meeting Privacy</div>
+                  <span class="text-[11px] text-gray-600 font-normal">Caller impact</span>
+                </td>
+                <td class="p-4 bg-red-50/40 text-red-800 font-bold border-l-2 border-r-2 border-black">
+                  Third-party stranger joins call; confidentiality risk
+                </td>
+                <td class="p-4 bg-neo-yellow/20 text-black font-black">
+                  Runs locally inside your browser; no outside human eavesdroppers
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Summary Footer Ribbon -->
+        <div class="p-5 bg-neo-yellow border-t-2 border-black flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="font-mono text-xs font-black uppercase text-black">
+            💡 The Bottom Line: Translatigo delivers faster, seamless interpretation at over 95% cost savings.
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="#pricing" class="btn-brutal bg-black text-white hover:bg-neo-lime hover:text-black px-4 py-2 text-xs">
+              View Pricing (7¢–9¢/min)
+            </a>
+            <a href="#simulator" class="btn-brutal bg-white hover:bg-neo-coral hover:text-white px-4 py-2 text-xs">
+              Try Live Demo
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- 8. PRICING SECTION (FIRST-TIME 20 MINS + REFILL/RENEWAL PACKS)    -->
+  <!-- ================================================================= -->
+  <section id="pricing" class="py-20 bg-neo-paper border-b-[3px] border-neo-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="stamp-badge bg-neo-yellow mb-3">TRANSPARENT CREDIT PACKAGES</span>
+        <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mt-2">
+          Simple Minute Packages.
+        </h2>
+        <p class="text-base sm:text-lg font-medium text-gray-800 mt-4">
+          First-time users get <strong>20 free minutes</strong> to test live. When your credits end, refill or renew seamlessly at standard package rates.
+        </p>
+
+        <!-- Cost Per Minute Quick-Compare Ribbon -->
+        <div class="mt-6 inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 bg-white border-3 border-black p-2.5 shadow-brutal font-mono text-xs font-bold animate-pulse-highlight">
+          <span class="bg-neo-yellow px-2 py-0.5 border border-black font-black uppercase">COST PER MINUTE:</span>
+          <span>Free: <strong>$0.00/min</strong></span>
+          <span>•</span>
+          <span>Starter: <strong>$0.09/min (9¢)</strong></span>
+          <span>•</span>
+          <span class="text-neo-coral font-black">Pro: <strong>$0.08/min (8¢)</strong></span>
+          <span>•</span>
+          <span class="bg-neo-cyan px-2 py-0.5 border border-black font-black">Business: <strong>$0.07/min (7¢)</strong></span>
+        </div>
+      </div>
+
+      <!-- Pricing Tier Cards Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+        
+        <!-- Tier 1: FIRST-TIME FREE TIER -->
+        <div class="card-brutal p-6 bg-white flex flex-col justify-between reveal-item">
+          <div>
+            <span class="font-mono text-xs font-black bg-neo-cyan px-2 py-0.5 border-2 border-black inline-block uppercase mb-3">
+              FIRST-TIME SIGNUP
+            </span>
+            <h3 class="text-2xl font-black uppercase">FREE TRIAL</h3>
+            <p class="text-xs font-medium text-gray-600 mt-1">One-time welcome credit for new users.</p>
+
+            <div class="my-5 pb-4 border-b-2 border-black">
+              <div class="flex items-baseline gap-1">
+                <span class="font-mono text-4xl font-black">$0</span>
+                <span class="font-mono text-xs font-bold text-gray-700">/ welcome</span>
+              </div>
+              <div class="font-mono text-sm font-black text-neo-coral mt-1">
+                20 Minutes Included
+              </div>
+
+              <!-- Highlight Cost Per Minute -->
+              <div class="mt-3.5 bg-neo-yellow border-2 border-black p-2 font-mono text-xs font-black flex items-center justify-between shadow-[2px_2px_0px_#000] animate-pulse-highlight">
+                <span class="text-[11px] uppercase text-black">⚡ COST / MINUTE:</span>
+                <span class="bg-black text-white px-2 py-0.5 text-xs font-black">$0.00 (FREE)</span>
+              </div>
+
+              <span class="text-[11px] font-mono text-gray-500 block mt-2">One-time bonus on first install</span>
+            </div>
+
+            <ul class="space-y-2.5 font-mono text-xs font-bold">
+              <li class="flex items-center gap-2">✓ 20 Free Welcome Minutes</li>
+              <li class="flex items-center gap-2">✓ No Credit Card Required</li>
+              <li class="flex items-center gap-2">✓ Works on Zoom, Meet &amp; Teams</li>
+              <li class="flex items-center gap-2">✓ All 80 Languages Unlocked</li>
+              <li class="flex items-center gap-2">✓ Minimal Conversational Latency</li>
+            </ul>
+          </div>
+
+          <div class="mt-6">
+            <button onclick="alert('Claiming your 20 free welcome minutes! Installing extension...')" class="btn-brutal bg-white hover:bg-neo-yellow w-full py-3 text-xs btn-wiggle">
+              Claim 20 Free Mins
+            </button>
+          </div>
+        </div>
+
+        <!-- Tier 2: STARTER ($18 for 200 mins) -->
+        <div class="card-brutal p-6 bg-white flex flex-col justify-between reveal-item">
+          <div>
+            <span class="font-mono text-xs font-black bg-neo-lime px-2 py-0.5 border-2 border-black inline-block uppercase mb-3">
+              INDIVIDUAL &amp; CALLS
+            </span>
+            <h3 class="text-2xl font-black uppercase">STARTER</h3>
+            <p class="text-xs font-medium text-gray-600 mt-1">For regular meetings &amp; freelancers.</p>
+
+            <div class="my-5 pb-4 border-b-2 border-black">
+              <div class="flex items-baseline gap-1">
+                <span class="font-mono text-4xl font-black">$18</span>
+                <span class="font-mono text-xs font-bold text-gray-700">/ pack</span>
+              </div>
+              <div class="font-mono text-sm font-black text-neo-black mt-1">
+                200 Voice Minutes
+              </div>
+              <div class="text-red-600 font-mono text-xs font-black mt-1 uppercase">
+                20 minutes free !
+              </div>
+
+              <!-- Highlight Cost Per Minute -->
+              <div class="mt-3.5 bg-neo-lime border-2 border-black p-2 font-mono text-xs font-black flex items-center justify-between shadow-[2px_2px_0px_#000] animate-pulse-highlight">
+                <span class="text-[11px] uppercase text-black">⚡ COST / MINUTE:</span>
+                <span class="bg-black text-white px-2 py-0.5 text-xs font-black">$0.09 (9¢/min)</span>
+              </div>
+
+              <span class="text-[11px] font-mono text-gray-500 block mt-2">Renews at standard $18 / 200 mins</span>
+            </div>
+
+            <ul class="space-y-2.5 font-mono text-xs font-bold">
+              <li class="flex items-center gap-2">✓ 200 Voice Minutes</li>
+              <li class="flex items-center gap-2">✓ Chrome Extension Full Access</li>
+              <li class="flex items-center gap-2">✓ Priority Voice Synthesis</li>
+              <li class="flex items-center gap-2">✓ Meeting Transcript Export</li>
+              <li class="flex items-center gap-2">✓ Refill anytime as needed</li>
+            </ul>
+          </div>
+
+          <div class="mt-6">
+            <button onclick="alert('Selected Starter Plan ($18 for 200 minutes + 20 minutes free).')" class="btn-brutal bg-white hover:bg-neo-lime w-full py-3 text-xs btn-wiggle">
+              Get Starter ($18)
+            </button>
+          </div>
+        </div>
+
+        <!-- Tier 3: PRO ($96 for 1200 mins) - FEATURED -->
+        <div class="card-brutal p-6 bg-neo-yellow flex flex-col justify-between relative transform -translate-y-2 shadow-brutal-xl reveal-item">
+          
+          <div class="absolute -top-3 right-3 bg-neo-coral text-white font-mono text-[10px] font-black px-2 py-0.5 border-2 border-black shadow-brutal-sm animate-float">
+            🔥 MOST POPULAR
+          </div>
+
+          <div>
+            <span class="font-mono text-xs font-black bg-black text-white px-2 py-0.5 border-2 border-black inline-block uppercase mb-3">
+              ACTIVE COMMUNICATORS
+            </span>
+            <h3 class="text-2xl font-black uppercase">PRO</h3>
+            <p class="text-xs font-medium text-gray-800 mt-1">For frequent daily international video calls.</p>
+
+            <div class="my-5 pb-4 border-b-2 border-black">
+              <div class="flex items-baseline gap-1">
+                <span class="font-mono text-4xl font-black">$96</span>
+                <span class="font-mono text-xs font-bold text-gray-800">/ pack</span>
+              </div>
+              <div class="font-mono text-sm font-black text-black mt-1">
+                1,200 Voice Minutes
+              </div>
+              <div class="text-red-600 font-mono text-xs font-black mt-1 uppercase">
+                20 minutes free !
+              </div>
+
+              <!-- Highlight Cost Per Minute -->
+              <div class="mt-3.5 bg-white border-2 border-black p-2 font-mono text-xs font-black flex items-center justify-between shadow-[2px_2px_0px_#000] animate-pulse-highlight">
+                <span class="text-[11px] uppercase text-black">🔥 COST / MINUTE:</span>
+                <span class="bg-neo-coral text-white px-2 py-0.5 text-xs font-black border border-black">$0.08 (8¢/min)</span>
+              </div>
+
+              <span class="text-[11px] font-mono text-gray-800 font-bold block mt-2">Renews at standard $96 / 1,200 mins</span>
+            </div>
+
+            <ul class="space-y-2.5 font-mono text-xs font-bold">
+              <li class="flex items-center gap-2">✓ 1,200 Voice Minutes</li>
+              <li class="flex items-center gap-2">✓ Speaker Voice Pitch Cloning</li>
+              <li class="flex items-center gap-2">✓ Custom Domain Vocabulary</li>
+              <li class="flex items-center gap-2">✓ High Value vs. Human Translators</li>
+              <li class="flex items-center gap-2">✓ Priority Beta Access to BPO Release</li>
+            </ul>
+          </div>
+
+          <div class="mt-6">
+            <button onclick="alert('Selected Pro Plan ($96 for 1,200 minutes + 20 minutes free).')" class="btn-brutal bg-black text-white hover:bg-neo-lime hover:text-black w-full py-3.5 text-xs btn-wiggle">
+              Get Pro ($96)
+            </button>
+          </div>
+        </div>
+
+        <!-- Tier 4: BUSINESS ($196 for 2800 mins) -->
+        <div class="card-brutal p-6 bg-white flex flex-col justify-between reveal-item">
+          <div>
+            <span class="font-mono text-xs font-black bg-neo-coral text-white px-2 py-0.5 border-2 border-black inline-block uppercase mb-3">
+              HEAVY VOLUME &amp; SCALE
+            </span>
+            <h3 class="text-2xl font-black uppercase">BUSINESS</h3>
+            <p class="text-xs font-medium text-gray-600 mt-1">Maximum minute allowance for heavy users.</p>
+
+            <div class="my-5 pb-4 border-b-2 border-black">
+              <div class="flex items-baseline gap-1">
+                <span class="font-mono text-4xl font-black">$196</span>
+                <span class="font-mono text-xs font-bold text-gray-700">/ pack</span>
+              </div>
+              <div class="font-mono text-sm font-black text-neo-black mt-1">
+                2,800 Voice Minutes
+              </div>
+              <div class="text-red-600 font-mono text-xs font-black mt-1 uppercase">
+                20 minutes free !
+              </div>
+
+              <!-- Highlight Cost Per Minute -->
+              <div class="mt-3.5 bg-neo-cyan border-2 border-black p-2 font-mono text-xs font-black flex items-center justify-between shadow-[2px_2px_0px_#000] animate-pulse-highlight">
+                <span class="text-[11px] uppercase text-black">🏆 COST / MINUTE:</span>
+                <span class="bg-black text-white px-2 py-0.5 text-xs font-black">$0.07 (7¢/min)</span>
+              </div>
+
+              <span class="text-[11px] font-mono text-gray-500 block mt-2">Renews at standard $196 / 2,800 mins</span>
+            </div>
+
+            <ul class="space-y-2.5 font-mono text-xs font-bold">
+              <li class="flex items-center gap-2">✓ 2,800 Voice Minutes (Max Value)</li>
+              <li class="flex items-center gap-2">✓ Team Account Sharing</li>
+              <li class="flex items-center gap-2">✓ Minimal Conversational Latency</li>
+              <li class="flex items-center gap-2">✓ Custom Slang &amp; Dialect Tuning</li>
+              <li class="flex items-center gap-2">✓ 24/7 Dedicated Support</li>
+            </ul>
+          </div>
+
+          <div class="mt-6">
+            <button onclick="alert('Selected Business Plan ($196 for 2,800 minutes + 20 minutes free).')" class="btn-brutal bg-white hover:bg-neo-cyan w-full py-3 text-xs btn-wiggle">
+              Get Business ($196)
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Credit Renewal Policy Note -->
+      <div class="mt-10 card-brutal bg-white border-2 border-black p-4 text-center font-mono text-xs text-gray-800 reveal-item">
+        💡 <strong>Credit Policy:</strong> The 20 free minutes are a one-time welcome bonus provided to all new accounts on first signup. After your credits conclude, renewals and refills occur at the standard credit quantities and prices indicated above.
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- 9. PRODUCT ROADMAP (CHROME EXTENSION -> BPO -> MOBILE APP)        -->
+  <!-- ================================================================= -->
+  <section id="roadmap" class="py-20 bg-neo-paper border-b-[3px] border-neo-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="stamp-badge bg-neo-cyan mb-3">WHERE WE ARE GOING</span>
+        <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mt-2">
+          Product Evolution &amp; Roadmap
+        </h2>
+        <p class="text-base sm:text-lg font-medium text-gray-800 mt-4">
+          Today: Chrome extension for video meetings. Later: BPO call center telephony. Then: native mobile apps.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Stage 1: NOW LIVE -->
+        <div class="card-brutal p-6 bg-white relative reveal-item">
+          <div class="inline-block bg-neo-lime text-black font-mono text-xs font-black px-2.5 py-1 border-2 border-black uppercase mb-4">
+            PHASE 1 • LIVE NOW
+          </div>
+          <h3 class="text-2xl font-black uppercase mb-2">Chrome Extension</h3>
+          <p class="text-sm text-gray-700 font-medium leading-relaxed mb-6">
+            Immediate voice-to-voice interpretation inside your browser. Translates Zoom, Google Meet, Microsoft Teams, Discord, and web video calls seamlessly with less latency than human translators.
+          </p>
+
+          <div class="font-mono text-xs space-y-2 pt-4 border-t-2 border-black">
+            <div class="text-neo-coral font-bold">STATUS: AVAILABLE NOW</div>
+            <div>• First-Time 20 Free Minutes</div>
+            <div>• Real-Time Low Latency</div>
+            <div>• 80 Languages &amp; Dialects</div>
+          </div>
+        </div>
+
+        <!-- Stage 2: COMING NEXT -->
+        <div class="card-brutal p-6 bg-neo-yellow relative reveal-item">
+          <div class="inline-block bg-black text-white font-mono text-xs font-black px-2.5 py-1 border-2 border-black uppercase mb-4">
+            PHASE 2 • NEXT UP
+          </div>
+          <h3 class="text-2xl font-black uppercase mb-2">BPO &amp; Telephony</h3>
+          <p class="text-sm text-gray-800 font-medium leading-relaxed mb-6">
+            When we build for BPO, we will include direct telephony support (Telnyx/Twilio SIP trunks). Enterprise agents can take foreign-language phone calls with real-time English translation.
+          </p>
+
+          <div class="font-mono text-xs space-y-2 pt-4 border-t-2 border-black">
+            <div class="text-black font-bold">STATUS: TELEPHONY IN DEVELOPMENT</div>
+            <div>• SIP Phone Trunks &amp; PBX Interconnect</div>
+            <div>• CRM Integration (Salesforce / HubSpot)</div>
+            <div>• Inbound Toll-Free Number Bridges</div>
+          </div>
+        </div>
+
+        <!-- Stage 3: NEXT -->
+        <div class="card-brutal p-6 bg-white relative reveal-item">
+          <div class="inline-block bg-neo-purple text-white font-mono text-xs font-black px-2.5 py-1 border-2 border-black uppercase mb-4">
+            PHASE 3 • FUTURE
+          </div>
+          <h3 class="text-2xl font-black uppercase mb-2">iOS &amp; Android App</h3>
+          <p class="text-sm text-gray-700 font-medium leading-relaxed mb-6">
+            Pocket AI interpreter for in-person international travel, live business conferences, and face-to-face conversations on mobile.
+          </p>
+
+          <div class="font-mono text-xs space-y-2 pt-4 border-t-2 border-black">
+            <div class="text-gray-600 font-bold">STATUS: PLANNED</div>
+            <div>• Split-Screen In-Person Mode</div>
+            <div>• Offline Voice Models</div>
+            <div>• Headset &amp; AirPod Integration</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- 10. FREQUENTLY ASKED QUESTIONS                                    -->
+  <!-- ================================================================= -->
+  <section id="faq" class="py-20 bg-neo-paper border-b-[3px] border-neo-black">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-12">
+        <span class="stamp-badge bg-neo-coral text-white mb-3">FREQUENT INQUIRIES</span>
+        <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mt-2">
+          Frequently Answered Questions
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- FAQ 1: Human interpreter comparison -->
+        <div class="card-brutal bg-white reveal-item">
+          <button onclick="toggleFaq(1)" class="w-full p-5 text-left flex items-center justify-between font-black text-base sm:text-lg uppercase">
+            <span>Why is Translatigo better value for money than human interpreters?</span>
+            <span id="faq-icon-1" class="font-mono text-xl font-black bg-neo-yellow border-2 border-black w-7 h-7 flex items-center justify-center">+</span>
+          </button>
+          <div id="faq-body-1" class="hidden px-5 pb-5 pt-1 text-sm text-gray-700 font-medium border-t-2 border-gray-200">
+            Hiring professional human interpreters costs $100 to $250+ per hour ($1.66 to $4.15/minute), requires days of advance scheduling, and forces speakers to pause after every sentence while the human takes notes. Translatigo works with significantly less latency in real time directly inside your Google Meet, Zoom, or Teams tab for just 7¢ to 9¢ per minute, with 20 free minutes for first-time users.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="card-brutal bg-white reveal-item">
+          <button onclick="toggleFaq(2)" class="w-full p-5 text-left flex items-center justify-between font-black text-base sm:text-lg uppercase">
+            <span>Which languages are supported?</span>
+            <span id="faq-icon-2" class="font-mono text-xl font-black bg-neo-lime border-2 border-black w-7 h-7 flex items-center justify-center">+</span>
+          </button>
+          <div id="faq-body-2" class="hidden px-5 pb-5 pt-1 text-sm text-gray-700 font-medium border-t-2 border-gray-200">
+            Translatigo supports 80 languages and regional scripts natively inside the Chrome extension, covering English, Spanish, Portuguese, French, German, Italian, Russian, Chinese, Japanese, Korean, Hindi, Indonesian, Vietnamese, Arabic, Bengali, Turkish, Dutch, Filipino, Swahili, Zulu, and 60+ more.
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="card-brutal bg-white reveal-item">
+          <button onclick="toggleFaq(3)" class="w-full p-5 text-left flex items-center justify-between font-black text-base sm:text-lg uppercase">
+            <span>How do package renewals and refills work?</span>
+            <span id="faq-icon-3" class="font-mono text-xl font-black bg-neo-cyan border-2 border-black w-7 h-7 flex items-center justify-center">+</span>
+          </button>
+          <div id="faq-body-3" class="hidden px-5 pb-5 pt-1 text-sm text-gray-700 font-medium border-t-2 border-gray-200">
+            Packages renew or refill at standard credits (Starter: $18 for 200 mins at 9¢/min, Pro: $96 for 1,200 mins at 8¢/min, Business: $196 for 2,800 mins at 7¢/min). Minutes deduct only during active voice translation.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="card-brutal bg-white reveal-item">
+          <button onclick="toggleFaq(4)" class="w-full p-5 text-left flex items-center justify-between font-black text-base sm:text-lg uppercase">
+            <span>When will phone/telephony support be available?</span>
+            <span id="faq-icon-4" class="font-mono text-xl font-black bg-neo-coral text-white border-2 border-black w-7 h-7 flex items-center justify-center">+</span>
+          </button>
+          <div id="faq-body-4" class="hidden px-5 pb-5 pt-1 text-sm text-gray-700 font-medium border-t-2 border-gray-200">
+            Telephony support (SIP phone trunks, Telnyx/Twilio inbound call routing) will launch in Phase 2 with our BPO release. Currently, our live Chrome extension is laser-focused on delivering the best video call translation experience.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="/blog/" class="btn-brutal bg-neo-cyan px-7 py-3.5 text-sm sm:text-base inline-flex items-center gap-2">
+          📚 Visit FAQ Hub
+        </a>
+      </div>
+
+    </div>
+  </section>
+  <section class="py-20 bg-neo-lime border-b-[3px] border-neo-black">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      
+      <div class="card-brutal bg-white p-8 sm:p-14 shadow-brutal-xl">
+        <span class="stamp-badge bg-neo-yellow mb-4">START IN SECONDS</span>
+        
+        <h2 class="text-3xl sm:text-6xl font-black uppercase tracking-tight text-neo-black mt-2 mb-6">
+          They Speak Theirs. You Hear Yours.
+        </h2>
+        
+        <p class="text-base sm:text-xl font-medium text-gray-800 max-w-2xl mx-auto mb-8 leading-relaxed">
+          Install the Chrome extension today and experience seamless real-time voice translation across 80 languages on your next Zoom, Google Meet, or Teams call.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <button onclick="alert('Redirecting to Google Chrome Web Store to install Translatigo with 20 free minutes!')" class="btn-brutal bg-neo-yellow text-neo-black px-8 py-4 text-base sm:text-lg flex items-center gap-2 btn-wiggle">
+            🧩 Add Translatigo To Chrome
+          </button>
+          <a href="#pricing" class="btn-brutal bg-neo-black text-white hover:bg-neo-cyan hover:text-black px-7 py-4 text-base sm:text-lg">
+            View Minute Packages
+          </a>
+        </div>
+
+        <div class="mt-6 font-mono text-xs font-bold text-gray-700">
+          ⚡ First-Time 20 Free Minutes • No Credit Card Required • Works in Chrome
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-neo-black text-white py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pb-8 border-b-2 border-gray-800">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-neo-lime text-black border-2 border-white flex items-center justify-center font-mono font-black text-xl">
+            TG
+          </div>
+          <div>
+            <span class="text-2xl font-black tracking-tight uppercase">TRANSLATIGO.COM</span>
+            <p class="font-mono text-xs text-gray-400">They Speak Their Language. You Hear It In Yours. (80 Languages)</p>
+          </div>
+        </div>
+        <div class="font-mono text-xs text-neo-lime flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-neo-lime animate-ping"></span>
+          <span>CHROME EXTENSION ACTIVE • FIRST-TIME 20 MINS FREE</span>
+        </div>
+      </div>
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-gray-500">
+        <div>&copy; 2026 TRANSLATIGO.COM. ALL RIGHTS RESERVED.</div>
+        <div class="flex gap-4">
+          <a href="#extension" class="hover:text-neo-yellow">Chrome Extension</a>
+          <a href="#platforms" class="hover:text-neo-yellow">Zoom &amp; Meet</a>
+          <a href="#languages" class="hover:text-neo-yellow">80 Languages</a>
+          <a href="#comparison" class="hover:text-neo-yellow">Vs Human Interpreters</a>
+          <a href="#pricing" class="hover:text-neo-yellow">Pricing</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================================================================= -->
+  <!-- 12. JAVASCRIPT & COMPLETE 80-LANGUAGE DATASET                     -->
+  <!-- ================================================================= -->
+  <script>
+    // -------------------------------------------------------------------
+    // Clean 80-Language Dataset (No internal engine labels shown)
+    // -------------------------------------------------------------------
+    const LANGUAGES_DATA = [
+      { name: 'English', flag: '🇺🇸', region: 'americas' },
+      { name: 'Spanish', flag: '🇪🇸', region: 'europe' },
+      { name: 'Portuguese', flag: '🇧🇷', region: 'americas' },
+      { name: 'French', flag: '🇫🇷', region: 'europe' },
+      { name: 'German', flag: '🇩🇪', region: 'europe' },
+      { name: 'Italian', flag: '🇮🇹', region: 'europe' },
+      { name: 'Russian', flag: '🇷🇺', region: 'europe' },
+      { name: 'Chinese', flag: '🇨🇳', region: 'asia' },
+      { name: 'Japanese', flag: '🇯🇵', region: 'asia' },
+      { name: 'Korean', flag: '🇰🇷', region: 'asia' },
+      { name: 'Hindi', flag: '🇮🇳', region: 'asia' },
+      { name: 'Indonesian', flag: '🇮🇩', region: 'asia' },
+      { name: 'Vietnamese', flag: '🇻🇳', region: 'asia' },
+
+      // Script / Region Variants
+      { name: 'Chinese (Simplified)', flag: '🇨🇳', region: 'asia' },
+      { name: 'Chinese (Traditional)', flag: '🇹🇼', region: 'asia' },
+      { name: 'Portuguese (Brazil)', flag: '🇧🇷', region: 'americas' },
+      { name: 'Portuguese (Portugal)', flag: '🇵🇹', region: 'europe' },
+
+      // Additional 63 Languages
+      { name: 'Afrikaans', flag: '🇿🇦', region: 'mea' },
+      { name: 'Akan', flag: '🇬🇭', region: 'mea' },
+      { name: 'Albanian', flag: '🇦🇱', region: 'europe' },
+      { name: 'Amharic', flag: '🇪🇹', region: 'mea' },
+      { name: 'Arabic', flag: '🇸🇦', region: 'mea' },
+      { name: 'Armenian', flag: '🇦🇲', region: 'europe' },
+      { name: 'Azerbaijani', flag: '🇦🇿', region: 'asia' },
+      { name: 'Basque', flag: '🇪🇸', region: 'europe' },
+      { name: 'Belarusian', flag: '🇧🇾', region: 'europe' },
+      { name: 'Bengali', flag: '🇧🇩', region: 'asia' },
+      { name: 'Bulgarian', flag: '🇧🇬', region: 'europe' },
+      { name: 'Burmese', flag: '🇲🇲', region: 'asia' },
+      { name: 'Catalan', flag: '🇪🇸', region: 'europe' },
+      { name: 'Croatian', flag: '🇭🇷', region: 'europe' },
+      { name: 'Czech', flag: '🇨🇿', region: 'europe' },
+      { name: 'Danish', flag: '🇩🇰', region: 'europe' },
+      { name: 'Dutch', flag: '🇳🇱', region: 'europe' },
+      { name: 'Estonian', flag: '🇪🇪', region: 'europe' },
+      { name: 'Filipino', flag: '🇵🇭', region: 'asia' },
+      { name: 'Finnish', flag: '🇫🇮', region: 'europe' },
+      { name: 'Galician', flag: '🇪🇸', region: 'europe' },
+      { name: 'Georgian', flag: '🇬🇪', region: 'europe' },
+      { name: 'Greek', flag: '🇬🇷', region: 'europe' },
+      { name: 'Gujarati', flag: '🇮🇳', region: 'asia' },
+      { name: 'Hausa', flag: '🇳🇬', region: 'mea' },
+      { name: 'Hebrew', flag: '🇮🇱', region: 'mea' },
+      { name: 'Hungarian', flag: '🇭🇺', region: 'europe' },
+      { name: 'Icelandic', flag: '🇮🇸', region: 'europe' },
+      { name: 'Javanese', flag: '🇮🇩', region: 'asia' },
+      { name: 'Kannada', flag: '🇮🇳', region: 'asia' },
+      { name: 'Kazakh', flag: '🇰🇿', region: 'asia' },
+      { name: 'Khmer', flag: '🇰🇭', region: 'asia' },
+      { name: 'Kinyarwanda', flag: '🇷🇼', region: 'mea' },
+      { name: 'Lao', flag: '🇱🇦', region: 'asia' },
+      { name: 'Latvian', flag: '🇱🇻', region: 'europe' },
+      { name: 'Lithuanian', flag: '🇱🇹', region: 'europe' },
+      { name: 'Macedonian', flag: '🇲🇰', region: 'europe' },
+      { name: 'Malay', flag: '🇲🇾', region: 'asia' },
+      { name: 'Malayalam', flag: '🇮🇳', region: 'asia' },
+      { name: 'Marathi', flag: '🇮🇳', region: 'asia' },
+      { name: 'Mongolian', flag: '🇲🇳', region: 'asia' },
+      { name: 'Nepali', flag: '🇳🇵', region: 'asia' },
+      { name: 'Norwegian', flag: '🇳🇴', region: 'europe' },
+      { name: 'Persian', flag: '🇮🇷', region: 'mea' },
+      { name: 'Polish', flag: '🇵🇱', region: 'europe' },
+      { name: 'Punjabi', flag: '🇮🇳', region: 'asia' },
+      { name: 'Romanian', flag: '🇷🇴', region: 'europe' },
+      { name: 'Serbian', flag: '🇷🇸', region: 'europe' },
+      { name: 'Sindhi', flag: '🇵🇰', region: 'asia' },
+      { name: 'Sinhala', flag: '🇱🇰', region: 'asia' },
+      { name: 'Slovak', flag: '🇸🇰', region: 'europe' },
+      { name: 'Slovenian', flag: '🇸🇮', region: 'europe' },
+      { name: 'Sundanese', flag: '🇮🇩', region: 'asia' },
+      { name: 'Swahili', flag: '🇰🇪', region: 'mea' },
+      { name: 'Swedish', flag: '🇸🇪', region: 'europe' },
+      { name: 'Tamil', flag: '🇮🇳', region: 'asia' },
+      { name: 'Telugu', flag: '🇮🇳', region: 'asia' },
+      { name: 'Thai', flag: '🇹🇭', region: 'asia' },
+      { name: 'Turkish', flag: '🇹🇷', region: 'europe' },
+      { name: 'Ukrainian', flag: '🇺🇦', region: 'europe' },
+      { name: 'Urdu', flag: '🇵🇰', region: 'asia' },
+      { name: 'Uzbek', flag: '🇺🇿', region: 'asia' },
+      { name: 'Zulu', flag: '🇿🇦', region: 'mea' },
+    ];
+
+    let currentRegion = 'all';
+
+    function renderLanguages(filterText = '') {
+      const grid = document.getElementById('languages-grid');
+      grid.innerHTML = '';
+
+      const searchLower = filterText.toLowerCase().trim();
+      const filtered = LANGUAGES_DATA.filter(lang => {
+        const matchesRegion = (currentRegion === 'all' || lang.region === currentRegion);
+        const matchesSearch = (!searchLower || 
+          lang.name.toLowerCase().includes(searchLower));
+        return matchesRegion && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-8 text-center text-sm font-bold text-gray-500">No language matches found. We support 80 languages and regional scripts.</div>`;
+        return;
+      }
+
+      filtered.forEach(lang => {
+        const card = document.createElement('div');
+        card.className = 'card-brutal p-3 bg-white hover:bg-neo-yellow transition-all duration-150 cursor-pointer flex flex-col justify-between';
+        card.onclick = () => {
+          alert(`Language: ${lang.name} (${lang.flag})\nStatus: Active in Chrome Extension`);
+        };
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-2xl">${lang.flag}</span>
+              <span class="text-[10px] font-mono font-bold text-neo-black bg-neo-yellow px-1.5 py-0.5 border border-black">LIVE</span>
+            </div>
+            <div class="font-black text-sm text-neo-black truncate">${lang.name}</div>
+          </div>
+          <div class="text-[10px] text-neo-coral font-mono font-bold mt-2 flex items-center justify-between">
+            <span>Supported</span>
+            <span>✓</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function setRegionFilter(region) {
+      currentRegion = region;
+      document.querySelectorAll('.region-filter-btn').forEach(b => {
+        if (b.getAttribute('data-region') === region) {
+          b.classList.remove('bg-white');
+          b.classList.add('bg-neo-yellow', 'active-region');
+        } else {
+          b.classList.remove('bg-neo-yellow', 'active-region');
+          b.classList.add('bg-white');
+        }
+      });
+      renderLanguages(document.getElementById('language-search').value);
+    }
+
+    function filterLanguages() {
+      const query = document.getElementById('language-search').value;
+      renderLanguages(query);
+    }
+
+    // -------------------------------------------------------------------
+    // Simulator Presets & Phrases
+    // -------------------------------------------------------------------
+    const SAMPLE_PHRASES = {
+      en: "Hello, our central database in Tokyo has stopped responding to inbound queries. We need emergency failover protocol immediately.",
+      ja: "こんにちは。東京の中央データベースが着信クエリに応答しなくなりました。直ちに緊急フェイルオーバープロトコルが必要です。",
+      es: "Buenas noches, nuestro vuelo llegó con retraso. ¿Podríamos organizar un traslado privado desde el aeropuerto y el registro tardío?",
+      fr: "Le patient ressent une douleur thoracique aiguë sévère et un essoufflement. Nous avons immédiatement besoin du cardiologue de garde.",
+      de: "Wir haben den Rahmenvertrag geprüft und sind bereit, die weltweite Einführung ab kommenden Montag durchzuführen.",
+      zh: "您好，我们在东京的中央数据库已停止响应传入查询。我们需要立即启动紧急故障转移协议。",
+      pt: "Boa noite, nosso voo chegou com atraso. Podemos organizar um transfer privado do aeroporto e check-in tardio para dois hóspedes?",
+      hi: "नमस्ते, टोक्यो में हमारे केंद्रीय डेटाबेस ने इनबाउंड प्रश्नों का उत्तर देना बंद कर दिया है। हमें तुरंत आपातकालीन प्रोटोकॉल की आवश्यकता है।",
+      it: "Buongiorno, abbiamo verificato il contratto quadro e siamo pronti a procedere con l'implementazione globale a partire da lunedì.",
+      ru: "Здравствуйте, наша центральная база данных в Токио перестала отвечать на входящие запросы. Нам срочно требуется протокол восстановления.",
+      ko: "안녕하세요, 도쿄의 중앙 데이터베이스가 인바운드 쿼리에 응답하지 않습니다. 즉시 긴급 장애 조치 프로토콜이 필요합니다.",
+      ar: "مرحباً، لقد توقفت قاعدة بياناتنا المركزية في طوكيو عن الاستجابة للاستفسارات الواردة. نحتاج فوراً إلى بروتوكول تجاوز الأعطال.",
+      nl: "Goedemiddag, we hebben de raamovereenkomst doorgenomen en zijn klaar om vanaf maandag wereldwijd uit te rollen.",
+      tr: "Merhaba, Tokyo'daki merkezi veritabanımız gelen sorgulara yanıt vermeyi durdurdu. Acil durum protokolüne ihtiyacımız var.",
+      vi: "Xin chào, cơ sở dữ liệu trung tâm của chúng tôi tại Tokyo đã ngừng phản hồi các truy vấn. Chúng tôi cần giao thức khẩn cấp ngay.",
+      id: "Halo, basis data pusat kami di Tokyo berhenti merespons kueri masuk. Kami membutuhkan protokol failover darurat sekarang juga.",
+      pl: "Dzień dobry, nasza centralna baza danych w Tokio przestała odpowiadać. Potrzebujemy natychmiastowego protokołu awaryjnego."
+    };
+
+    const CHANNELS = [
+      {
+        srcCode: "en",
+        srcFlag: "🇺🇸",
+        srcLang: "English",
+        outCode: "es",
+        outFlag: "🇪🇸",
+        outLang: "Spanish",
+        srcText: "Enjoy clear, real-time communication.",
+        outText: "Disfrute de una comunicación clara y en tiempo real."
+      },
+      {
+        srcCode: "ja",
+        srcFlag: "🇯🇵",
+        srcLang: "Japanese",
+        outCode: "en",
+        outFlag: "🇺🇸",
+        outLang: "English",
+        srcText: "クリアなコミュニケーションをお楽しみください。",
+        outText: "Enjoy crystal-clear communication."
+      },
+      {
+        srcCode: "fr",
+        srcFlag: "🇫🇷",
+        srcLang: "French",
+        outCode: "de",
+        outFlag: "🇩🇪",
+        outLang: "German",
+        srcText: "Profitez d'une communication claire et instantanée.",
+        outText: "Genießen Sie eine klare und sofortige Kommunikation."
+      }
+    ];
+
+    const LANG_METADATA = {
+      en: { flag: "🇺🇸", name: "English" },
+      es: { flag: "🇪🇸", name: "Spanish" },
+      ja: { flag: "🇯🇵", name: "Japanese" },
+      fr: { flag: "🇫🇷", name: "French" },
+      de: { flag: "🇩🇪", name: "German" },
+      zh: { flag: "🇨🇳", name: "Chinese" },
+      pt: { flag: "🇧🇷", name: "Portuguese" },
+      hi: { flag: "🇮🇳", name: "Hindi" },
+      it: { flag: "🇮🇹", name: "Italian" },
+      ru: { flag: "🇷🇺", name: "Russian" },
+      ko: { flag: "🇰🇷", name: "Korean" },
+      ar: { flag: "🇸🇦", name: "Arabic" },
+      nl: { flag: "🇳🇱", name: "Dutch" },
+      tr: { flag: "🇹🇷", name: "Turkish" },
+      vi: { flag: "🇻🇳", name: "Vietnamese" },
+      id: { flag: "🇮🇩", name: "Indonesian" },
+      pl: { flag: "🇵🇱", name: "Polish" }
+    };
+
+    const SCENARIOS = {
+      support: {
+        sourceLang: "en",
+        targetLang: "ja",
+        sourceText: "Hello, our central database in Tokyo has stopped responding to inbound queries. We need emergency failover protocol immediately.",
+        targetText: "こんにちは。東京の中央データベースが着信クエリに応答しなくなりました。直ちに緊急フェイルオーバープロトコルが必要です。"
+      },
+      hotel: {
+        sourceLang: "en",
+        targetLang: "es",
+        sourceText: "Good evening, our flight arrived late. Can we arrange a private airport transfer and late check-in for two guests?",
+        targetText: "Buenas noches, nuestro vuelo llegó con retraso. ¿Podríamos organizar un traslado privado desde el aeropuerto y el registro tardío para dos huéspedes?"
+      },
+      medical: {
+        sourceLang: "en",
+        targetLang: "fr",
+        sourceText: "Patient is experiencing severe acute chest pain and shortness of breath. We need the on-duty cardiologist immediately.",
+        targetText: "Le patient ressent une douleur thoracique aiguë sévère et un essoufflement. Nous avons immédiatement besoin du cardiologue de garde."
+      },
+      sales: {
+        sourceLang: "en",
+        targetLang: "de",
+        sourceText: "We reviewed the master service agreement and we are ready to proceed with the global deployment starting next Monday.",
+        targetText: "Wir haben den Rahmenvertrag geprüft und sind bereit, die weltweite Einführung ab kommenden Montag durchzuführen."
+      }
+    };
+
+    let currentChannelIdx = 2;
+    let currentScenario = 'support';
+    let isMuted = false;
+    let isVoicePlaying = false;
+    let isSimRunning = true;
+    let bufferWindow = 61;
+    let noiseFloor = 29;
+    let animTime = 0;
+    let hubAngle = 0;
+
+    // 4 Dynamic traveling packets
+    const packets = [
+      { x: 182.17, seed: 1 },
+      { x: 307.89, seed: 2 },
+      { x: 400.59, seed: 3 },
+      { x: 450.24, seed: 4 }
+    ];
+
+    // Pipeline DOM Element References
+    let playToggleBtn, playIcon, pauseIcon;
+    let srcBadgeText, outBadgeText, srcTextVal, outTextVal;
+    let metricLatency, metricAccuracy, metricBitrate;
+    let bufferSlider, bufferFill, bufferValueText;
+    let noiseSlider, noiseFill, noiseValueText;
+    let leftWavePath, rightWavePath, hubOuter, hubInner, hubAura, packetElements;
+
+    function initPipelineDOM() {
+      playToggleBtn = document.getElementById("playToggle");
+      playIcon = document.getElementById("playIcon");
+      pauseIcon = document.getElementById("pauseIcon");
+
+      srcBadgeText = document.getElementById("srcBadgeText");
+      outBadgeText = document.getElementById("outBadgeText");
+      srcTextVal = document.getElementById("srcTextVal");
+      outTextVal = document.getElementById("outTextVal");
+
+      metricLatency = document.getElementById("metricLatency");
+      metricAccuracy = document.getElementById("metricAccuracy");
+      metricBitrate = document.getElementById("metricBitrate");
+
+      bufferSlider = document.getElementById("bufferSlider");
+      bufferFill = document.getElementById("bufferFill");
+      bufferValueText = document.getElementById("bufferValueText");
+
+      noiseSlider = document.getElementById("noiseSlider");
+      noiseFill = document.getElementById("noiseFill");
+      noiseValueText = document.getElementById("noiseValueText");
+
+      leftWavePath = document.getElementById("leftWave");
+      rightWavePath = document.getElementById("rightWave");
+      hubOuter = document.getElementById("hubOuter");
+      hubInner = document.getElementById("hubInner");
+      hubAura = document.getElementById("hubAura");
+      packetElements = document.querySelectorAll(".packet");
+
+      if (bufferSlider) {
+        bufferSlider.addEventListener("input", (e) => {
+          bufferWindow = parseInt(e.target.value, 10);
+          updateSliderTracks();
+        });
+      }
+
+      if (noiseSlider) {
+        noiseSlider.addEventListener("input", (e) => {
+          noiseFloor = parseInt(e.target.value, 10);
+          updateSliderTracks();
+        });
+      }
+
+      if (playToggleBtn) {
+        playToggleBtn.addEventListener("click", togglePipelineSimulation);
+      }
+
+      updateSliderTracks();
+      updatePipelineBadgesAndTranscripts();
+    }
+
+    // Oscillating sine wave path calculation (reacts to noiseFloor jitter & bufferWindow frequency)
+    function generateWavePath(startX, endX, centerY, amplitude, frequency, timeOffset, noiseNorm = 0) {
+      let d = "";
+      const steps = 24;
+      const stepSize = (endX - startX) / steps;
+      for (let i = 0; i <= steps; i++) {
+        const x = startX + i * stepSize;
+        const progress = i / steps;
+        const envelope = Math.sin(progress * Math.PI);
+        const pureWave = Math.sin(i * frequency + timeOffset) * amplitude * envelope;
+        const noiseJitter = (Math.sin(i * 4.7 + timeOffset * 2.5) * (noiseNorm * 6) + Math.cos(i * 8.3) * (noiseNorm * 3.5)) * envelope;
+        d += (i === 0 ? "M " : " L ") + x.toFixed(2) + " " + (centerY + pureWave + noiseJitter).toFixed(2);
+      }
+      return d;
+    }
+
+    function togglePipelineSimulation() {
+      isSimRunning = !isSimRunning;
+      if (playIcon) playIcon.style.display = isSimRunning ? "none" : "block";
+      if (pauseIcon) pauseIcon.style.display = isSimRunning ? "block" : "none";
+      if (playToggleBtn) playToggleBtn.style.backgroundColor = isSimRunning ? "#22c55e" : "#f43f5e";
+    }
+
+    function updateSliderTracks() {
+      if (bufferSlider && bufferFill && bufferValueText) {
+        const bufPct = ((bufferWindow - 20) / (100 - 20)) * 100;
+        bufferFill.style.width = `${bufPct}%`;
+        bufferValueText.textContent = `${bufferWindow}ms`;
+      }
+
+      if (noiseSlider && noiseFill && noiseValueText) {
+        const noisePct = ((noiseFloor - 5) / (50 - 5)) * 100;
+        noiseFill.style.width = `${noisePct}%`;
+        noiseValueText.textContent = `${noiseFloor}dB`;
+      }
+    }
+
+    function setChannel(idx) {
+      currentChannelIdx = idx;
+      document.querySelectorAll(".channel-btn").forEach((btn, i) => {
+        btn.classList.toggle("active", i === idx);
+      });
+      document.querySelectorAll(".scenario-btn").forEach(btn => {
+        btn.classList.remove("bg-neo-yellow", "active-scenario");
+        btn.classList.add("bg-white");
+      });
+
+      const data = CHANNELS[idx];
+      if (!data) return;
+
+      const srcSelect = document.getElementById("source-lang-select");
+      const trgSelect = document.getElementById("target-lang-select");
+      const callerEl = document.getElementById("caller-speech-text");
+      const targetEl = document.getElementById("target-speech-text");
+
+      if (srcSelect) srcSelect.value = data.srcCode;
+      if (trgSelect) trgSelect.value = data.outCode;
+      if (callerEl) callerEl.value = data.srcText;
+      if (targetEl) targetEl.value = data.outText;
+
+      const statusBadge = document.getElementById("translation-status-badge");
+      if (statusBadge) {
+        statusBadge.textContent = "READY";
+        statusBadge.className = "bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono";
+      }
+
+      updatePipelineBadgesAndTranscripts();
+    }
+
+    function setScenario(id) {
+      if (!SCENARIOS[id]) return;
+      currentScenario = id;
+      const sc = SCENARIOS[id];
+
+      document.querySelectorAll(".channel-btn").forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll(".scenario-btn").forEach(btn => {
+        if (btn.getAttribute("data-id") === id) {
+          btn.classList.remove("bg-white");
+          btn.classList.add("bg-neo-yellow", "active-scenario");
+        } else {
+          btn.classList.remove("bg-neo-yellow", "active-scenario");
+          btn.classList.add("bg-white");
+        }
+      });
+
+      const callerEl = document.getElementById("caller-speech-text");
+      const targetEl = document.getElementById("target-speech-text");
+      const srcSelect = document.getElementById("source-lang-select");
+      const trgSelect = document.getElementById("target-lang-select");
+
+      if (srcSelect) srcSelect.value = sc.sourceLang;
+      if (trgSelect) trgSelect.value = sc.targetLang;
+      if (callerEl) callerEl.value = sc.sourceText;
+      if (targetEl) targetEl.value = sc.targetText;
+
+      const statusBadge = document.getElementById("translation-status-badge");
+      if (statusBadge) {
+        statusBadge.textContent = "READY";
+        statusBadge.className = "bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono";
+      }
+
+      updatePipelineBadgesAndTranscripts();
+    }
+
+    function updatePipelineBadgesAndTranscripts() {
+      const srcSelect = document.getElementById("source-lang-select");
+      const trgSelect = document.getElementById("target-lang-select");
+      const callerEl = document.getElementById("caller-speech-text");
+      const targetEl = document.getElementById("target-speech-text");
+
+      const srcCode = srcSelect ? srcSelect.value : "fr";
+      const trgCode = trgSelect ? trgSelect.value : "de";
+      const srcMeta = LANG_METADATA[srcCode] || { flag: "🌐", name: srcCode.toUpperCase() };
+      const trgMeta = LANG_METADATA[trgCode] || { flag: "🌐", name: trgCode.toUpperCase() };
+
+      const srcBadgeEl = document.getElementById("srcBadgeText");
+      const outBadgeEl = document.getElementById("outBadgeText");
+      if (srcBadgeEl) srcBadgeEl.textContent = `${srcMeta.flag} ${srcMeta.name}`;
+      if (outBadgeEl) outBadgeEl.textContent = `${trgMeta.flag} ${trgMeta.name}`;
+
+      const srcValEl = document.getElementById("srcTextVal");
+      const outValEl = document.getElementById("outTextVal");
+      if (srcValEl && callerEl) {
+        const txt = callerEl.value.trim();
+        srcValEl.textContent = txt ? `“${txt}”` : "—";
+      }
+      if (outValEl && targetEl) {
+        const txt = targetEl.value.trim();
+        outValEl.textContent = txt ? `“${txt}”` : "—";
+      }
+    }
+
+    function syncActivePresetState() {
+      const srcSelect = document.getElementById("source-lang-select");
+      const trgSelect = document.getElementById("target-lang-select");
+      if (!srcSelect || !trgSelect) return;
+      const srcCode = srcSelect.value;
+      const trgCode = trgSelect.value;
+
+      document.querySelectorAll(".channel-btn").forEach((btn, idx) => {
+        const ch = CHANNELS[idx];
+        if (ch && ch.srcCode === srcCode && ch.outCode === trgCode) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+
+      document.querySelectorAll(".scenario-btn").forEach(btn => {
+        const scId = btn.getAttribute("data-id");
+        const sc = SCENARIOS[scId];
+        if (sc && sc.sourceLang === srcCode && sc.targetLang === trgCode) {
+          btn.classList.add("bg-neo-yellow", "active-scenario");
+          btn.classList.remove("bg-white");
+        } else {
+          btn.classList.remove("bg-neo-yellow", "active-scenario");
+          btn.classList.add("bg-white");
+        }
+      });
+    }
+
+    function updateLanguagePairs(side) {
+      const srcSelect = document.getElementById("source-lang-select");
+      const trgSelect = document.getElementById("target-lang-select");
+      const callerTextEl = document.getElementById("caller-speech-text");
+
+      if (side === "source" && srcSelect && callerTextEl) {
+        const lang = srcSelect.value;
+        if (!callerTextEl.value.trim() && SAMPLE_PHRASES[lang]) {
+          callerTextEl.value = SAMPLE_PHRASES[lang];
+        }
+      }
+
+      updatePipelineBadgesAndTranscripts();
+      syncActivePresetState();
+      autoTranslate();
+    }
+
+    // Dynamic Animation Loop (driven dynamically by bufferWindow & noiseFloor sliders)
+    function tickPipeline() {
+      if (isSimRunning) {
+        animTime += 0.05;
+
+        // Sliders normalized values (0.0 to 1.0)
+        const bufferNorm = (bufferWindow - 20) / (100 - 20); // 0.0 at 20ms (fast/tight) to 1.0 at 100ms (steady/relaxed)
+        const noiseNorm = (noiseFloor - 5) / (50 - 5);       // 0.0 at 5dB (whisper/clean) to 1.0 at 50dB (noisy/jittery)
+        const voiceMultiplier = isVoicePlaying ? 1.45 : 1.0;
+
+        // 1. Hub rotation speed (driven by bufferWindow - tighter buffer means faster processing cycle)
+        const hubSpeed = (2.6 - bufferNorm * 1.8) * (isVoicePlaying ? 1.3 : 1.0);
+        hubAngle = (hubAngle + hubSpeed) % 360;
+
+        // 2. Wave parameters (amplitude & jitter driven by noiseFloor; frequency & travel speed driven by bufferWindow)
+        const waveAmp = (8 + noiseNorm * 22) * voiceMultiplier;
+        const waveFreq = 0.55 + (1.0 - bufferNorm) * 0.75;
+        const waveSpeed = 2.2 + (1.0 - bufferNorm) * 3.0;
+
+        const leftPath = generateWavePath(61.2, 208.08, 153, waveAmp, waveFreq, animTime * waveSpeed, noiseNorm);
+        const rightPath = generateWavePath(403.92, 550.8, 153, waveAmp * 0.9, waveFreq * 1.05, animTime * (waveSpeed * 1.05), noiseNorm);
+
+        if (leftWavePath) leftWavePath.setAttribute("d", leftPath);
+        if (rightWavePath) rightWavePath.setAttribute("d", rightPath);
+
+        if (hubOuter) hubOuter.setAttribute("transform", `rotate(${hubAngle.toFixed(1)}, 306, 153)`);
+        if (hubInner) hubInner.setAttribute("transform", `rotate(${(-hubAngle * 0.5).toFixed(1)}, 306, 153)`);
+
+        // 3. Hub aura pulse (expands and pulses with noiseFloor)
+        const auraRadius = 50 + noiseNorm * 12 + Math.sin(animTime * 3.5) * (2 + noiseNorm * 3);
+        if (hubAura) hubAura.setAttribute("r", auraRadius.toFixed(1));
+
+        // 4. Packets: speed & size driven by bufferWindow, vertical wobble driven by noiseFloor
+        const packetSpeedMult = 2.2 - bufferNorm * 1.5;
+        const packetStep = (isVoicePlaying ? 2.2 : 1.3) * packetSpeedMult;
+        const packetSize = Math.round(7 + bufferNorm * 7); // 7px at 20ms to 14px at 100ms
+        const wobble = 1.5 + noiseNorm * 7.5;              // 1.5px at 5dB to 9px at 50dB
+
+        packets.forEach((p, index) => {
+          p.x += packetStep;
+          if (p.x > 477.36) p.x = 134.64;
+          const y = 153 + Math.sin(p.x * 0.08 + p.seed) * wobble - (packetSize / 2);
+
+          if (packetElements && packetElements[index]) {
+            const el = packetElements[index];
+            el.setAttribute("x", (p.x - packetSize / 2).toFixed(2));
+            el.setAttribute("y", y.toFixed(2));
+            el.setAttribute("width", packetSize);
+            el.setAttribute("height", packetSize);
+            el.setAttribute("fill", p.x < 306 ? "#eab308" : "#3b82f6");
+          }
+        });
+
+        // 5. Dynamic Telemetry Metrics
+        const liveLatency = (bufferWindow + noiseFloor * 0.18 + Math.sin(animTime * 2) * 1.2).toFixed(1);
+        const liveAccuracy = Math.min(
+          99.4,
+          Math.max(82.0, 99.5 - noiseFloor * 0.16 + (bufferWindow > 50 ? 0.8 : -1.2) + Math.cos(animTime * 1.5) * 0.3)
+        ).toFixed(1);
+        const liveBitrate = Math.round(128 - noiseFloor * 0.4 + (bufferWindow / 100) * 8);
+
+        if (metricLatency) metricLatency.textContent = `${liveLatency}ms`;
+        if (metricAccuracy) metricAccuracy.textContent = `${liveAccuracy}%`;
+        if (metricBitrate) metricBitrate.textContent = `${liveBitrate}kbps`;
+      }
+      requestAnimationFrame(tickPipeline);
+    }
+
+    function getBestVoiceForLang(langCode) {
+      if (!('speechSynthesis' in window)) return null;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return null;
+
+      const code = langCode.toLowerCase();
+      const prefix = code.split('-')[0];
+
+      return voices.find(v => v.lang.toLowerCase() === code || v.lang.toLowerCase().replace('_', '-') === code) ||
+             voices.find(v => v.lang.toLowerCase().startsWith(prefix + '-') || v.lang.toLowerCase().startsWith(prefix + '_')) ||
+             voices.find(v => v.lang.toLowerCase().startsWith(prefix)) ||
+             null;
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    let translationDebounceTimer = null;
+    let translationAbortController = null;
+
+    function handleSourceInput() {
+      clearTimeout(translationDebounceTimer);
+      const callerEl = document.getElementById('caller-speech-text');
+      const srcValEl = document.getElementById('srcTextVal');
+      if (srcValEl && callerEl) {
+        srcValEl.textContent = `“${callerEl.value.trim()}”`;
+      }
+
+      const statusBadge = document.getElementById('translation-status-badge');
+      if (statusBadge) {
+        statusBadge.textContent = 'TYPING...';
+        statusBadge.className = 'bg-neo-yellow text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono';
+      }
+      translationDebounceTimer = setTimeout(() => {
+        autoTranslate();
+      }, 400);
+    }
+
+    async function autoTranslate() {
+      const srcSelect = document.getElementById('source-lang-select');
+      const trgSelect = document.getElementById('target-lang-select');
+      const callerEl = document.getElementById('caller-speech-text');
+      const targetEl = document.getElementById('target-speech-text');
+      const statusBadge = document.getElementById('translation-status-badge');
+      const outValEl = document.getElementById('outTextVal');
+
+      if (!callerEl || !targetEl) return;
+
+      const rawText = callerEl.value.trim();
+      const srcLang = srcSelect ? srcSelect.value : 'fr';
+      const trgLang = trgSelect ? trgSelect.value : 'de';
+
+      if (!rawText) {
+        targetEl.value = '';
+        if (outValEl) outValEl.textContent = '—';
+        if (statusBadge) {
+          statusBadge.textContent = 'READY';
+          statusBadge.className = 'bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono';
+        }
+        return;
+      }
+
+      if (srcLang === trgLang) {
+        targetEl.value = rawText;
+        if (outValEl) outValEl.textContent = `“${rawText}”`;
+        if (statusBadge) {
+          statusBadge.textContent = 'IDENTICAL';
+          statusBadge.className = 'bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono';
+        }
+        return;
+      }
+
+      // Check known scenario presets for instant local match (forward & reverse)
+      for (const key in SCENARIOS) {
+        const sc = SCENARIOS[key];
+        if (sc.sourceLang === srcLang && sc.targetLang === trgLang && sc.sourceText.trim() === rawText) {
+          targetEl.value = sc.targetText;
+          if (outValEl) outValEl.textContent = `“${sc.targetText}”`;
+          if (statusBadge) {
+            statusBadge.textContent = 'TRANSLATED';
+            statusBadge.className = 'bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono';
+          }
+          return;
+        }
+        if (sc.targetLang === srcLang && sc.sourceLang === trgLang && sc.targetText.trim() === rawText) {
+          targetEl.value = sc.sourceText;
+          if (outValEl) outValEl.textContent = `“${sc.sourceText}”`;
+          if (statusBadge) {
+            statusBadge.textContent = 'TRANSLATED';
+            statusBadge.className = 'bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono';
+          }
+          return;
+        }
+      }
+
+      // Check channels presets (forward & reverse)
+      for (const ch of CHANNELS) {
+        if (ch.srcCode === srcLang && ch.outCode === trgLang && ch.srcText.trim() === rawText) {
+          targetEl.value = ch.outText;
+          if (outValEl) outValEl.textContent = `“${ch.outText}”`;
+          if (statusBadge) {
+            statusBadge.textContent = 'TRANSLATED';
+            statusBadge.className = 'bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono';
+          }
+          return;
+        }
+        if (ch.outCode === srcLang && ch.srcCode === trgLang && ch.outText.trim() === rawText) {
+          targetEl.value = ch.srcText;
+          if (outValEl) outValEl.textContent = `“${ch.srcText}”`;
+          if (statusBadge) {
+            statusBadge.textContent = 'TRANSLATED';
+            statusBadge.className = 'bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono';
+          }
+          return;
+        }
+      }
+
+      if (translationAbortController) {
+        translationAbortController.abort();
+      }
+      translationAbortController = new AbortController();
+
+      if (statusBadge) {
+        statusBadge.textContent = 'TRANSLATING...';
+        statusBadge.className = 'bg-neo-yellow text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono animate-pulse';
+      }
+
+      try {
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(rawText)}&langpair=${srcLang}|${trgLang}`;
+        const res = await fetch(url, { signal: translationAbortController.signal });
+        if (!res.ok) throw new Error('Translation response error');
+        const data = await res.json();
+
+        if (data && data.responseData && data.responseData.translatedText) {
+          const txt = document.createElement('textarea');
+          txt.innerHTML = data.responseData.translatedText;
+          targetEl.value = txt.value;
+          if (outValEl) outValEl.textContent = `“${txt.value}”`;
+
+          if (statusBadge) {
+            statusBadge.textContent = 'TRANSLATED';
+            statusBadge.className = 'bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono';
+          }
+        } else {
+          throw new Error('No translated text');
+        }
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+        console.warn('Auto-translation notice:', err);
+        if (statusBadge) {
+          statusBadge.textContent = 'AUTO-GENERATED';
+          statusBadge.className = 'bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[9px] font-mono';
+        }
+      }
+    }
+
+    function playSimulation(side = 'target') {
+      if (isVoicePlaying) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        stopVisualizer();
+        return;
+      }
+
+      const isTarget = (side === 'target');
+      const langEl = document.getElementById(isTarget ? 'target-lang-select' : 'source-lang-select');
+      const textEl = document.getElementById(isTarget ? 'target-speech-text' : 'caller-speech-text');
+
+      const selectedLang = langEl ? langEl.value : 'en';
+      const rawText = textEl ? (textEl.value || textEl.textContent || '') : '';
+      const textToSpeak = rawText.replace(/[「」«»„“"']/g, '').trim();
+
+      if (!textToSpeak) {
+        alert('No translated text found to speak. Please type a sentence in Column A.');
+        return;
+      }
+
+      startVisualizer(isTarget ? 'target' : 'caller');
+      isVoicePlaying = true;
+      const playIcon = document.getElementById('play-icon');
+      const playLabel = document.getElementById('play-label');
+      if (playIcon) playIcon.textContent = '⏹';
+      if (playLabel) playLabel.textContent = isTarget ? 'Speaking Translated Audio (Column B)...' : 'Speaking Original Audio...';
+
+      if (!isMuted && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = selectedLang;
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+
+        const matchedVoice = getBestVoiceForLang(selectedLang);
+        if (matchedVoice) utterance.voice = matchedVoice;
+
+        utterance.onend = stopVisualizer;
+        utterance.onerror = (e) => {
+          console.warn('TTS playback issue:', e);
+          stopVisualizer();
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } else {
+        setTimeout(stopVisualizer, 3500);
+      }
+    }
+
+    function startVisualizer(which = 'both') {
+      isVoicePlaying = true;
+      const playIcon = document.getElementById('play-icon');
+      const playLabel = document.getElementById('play-label');
+      if (playIcon) playIcon.textContent = '⏹';
+      if (playLabel) playLabel.textContent = (which === 'target') ? 'Speaking Translated Audio (Column B)...' : 'Speaking Original Audio...';
+    }
+
+    function stopVisualizer() {
+      isVoicePlaying = false;
+      const playIcon = document.getElementById('play-icon');
+      const playLabel = document.getElementById('play-label');
+      if (playIcon) playIcon.textContent = '▶';
+      if (playLabel) playLabel.textContent = 'Simulate Voice Call & Listen (Column B)';
+    }
+
+    function swapLanguages() {
+      const srcEl = document.getElementById('source-lang-select');
+      const trgEl = document.getElementById('target-lang-select');
+      const callerTextEl = document.getElementById('caller-speech-text');
+      const targetTextEl = document.getElementById('target-speech-text');
+
+      if (!srcEl || !trgEl || !callerTextEl || !targetTextEl) return;
+
+      // Stop ongoing voice synthesis or visualizers
+      if (isVoicePlaying) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        stopVisualizer();
+      }
+
+      // Cancel pending auto-translate timers / HTTP requests
+      clearTimeout(translationDebounceTimer);
+      if (translationAbortController) {
+        translationAbortController.abort();
+      }
+
+      // 1. Swap languages
+      const tempLang = srcEl.value;
+      srcEl.value = trgEl.value;
+      trgEl.value = tempLang;
+
+      // 2. Swap text contents between Column A and Column B
+      const tempText = callerTextEl.value;
+      callerTextEl.value = targetTextEl.value;
+      targetTextEl.value = tempText;
+
+      // 3. Update badges, SVGs, and transcript pills
+      updatePipelineBadgesAndTranscripts();
+
+      // 4. Update channel/scenario button highlights to match new direction
+      syncActivePresetState();
+
+      // 5. Update status badge
+      const statusBadge = document.getElementById('translation-status-badge');
+      if (statusBadge) {
+        statusBadge.textContent = 'SWAPPED';
+        statusBadge.className = 'bg-neo-lime text-black px-1.5 py-0.2 border border-black font-bold text-[8px] font-mono';
+        setTimeout(() => {
+          if (statusBadge && statusBadge.textContent === 'SWAPPED') {
+            statusBadge.textContent = 'READY';
+          }
+        }, 1200);
+      }
+
+      // 6. If target became empty but caller has text, auto-translate
+      if (!targetTextEl.value.trim() && callerTextEl.value.trim()) {
+        autoTranslate();
+      }
+    }
+
+    function initScrollAnimations() {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal-item').forEach(el => el.classList.add('in-view'));
+        return;
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+      document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initPipelineDOM();
+      tickPipeline();
+      stopVisualizer();
+      renderLanguages();
+      initScrollAnimations();
+    });
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      const btn = document.getElementById('mute-btn');
+      if (isMuted) {
+        btn.textContent = 'MUTE: ON';
+        btn.classList.replace('bg-neo-black', 'bg-neo-coral');
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      } else {
+        btn.textContent = 'MUTE: OFF';
+        btn.classList.replace('bg-neo-coral', 'bg-neo-black');
+      }
+    }
+
+    function toggleFaq(num) {
+      const body = document.getElementById(`faq-body-${num}`);
+      const icon = document.getElementById(`faq-icon-${num}`);
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        icon.textContent = '−';
+      } else {
+        body.classList.add('hidden');
+        icon.textContent = '+';
+      }
+    }
+  </script>
+</body>
+</html>

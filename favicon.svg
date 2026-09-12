@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="4" y="4" width="56" height="56" rx="4" fill="#00F076" stroke="#0D0D0D" stroke-width="5" />
+  <text x="32" y="42" font-family="'JetBrains Mono', monospace, sans-serif" font-weight="900" font-size="28" fill="#0D0D0D" text-anchor="middle">TG</text>
+</svg>
