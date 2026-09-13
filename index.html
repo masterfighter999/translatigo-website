@@ -1453,12 +1453,12 @@
                 <span class="bg-black text-white px-2 py-0.5 text-xs font-black">$0.00 (FREE)</span>
               </div>
 
-              <span class="text-[11px] font-mono text-gray-500 block mt-2">One-time bonus on first install</span>
+              <span class="text-[11px] font-mono text-gray-500 block mt-2">$0 charged today. Card required for mandate (renews at $18 / 200 mins).</span>
             </div>
 
             <ul class="space-y-2.5 font-mono text-xs font-bold">
               <li class="flex items-center gap-2">✓ 20 Free Welcome Minutes</li>
-              <li class="flex items-center gap-2">✓ No Credit Card Required</li>
+              <li class="flex items-center gap-2">✓ Card Required for Mandate ($0 Today)</li>
               <li class="flex items-center gap-2">✓ Works on Zoom, Meet &amp; Teams</li>
               <li class="flex items-center gap-2">✓ All 80 Languages Unlocked</li>
               <li class="flex items-center gap-2">✓ Minimal Conversational Latency</li>
@@ -1466,8 +1466,8 @@
           </div>
 
           <div class="mt-6">
-            <button onclick="tgCheckout(this, 'STARTER')" class="btn-brutal bg-white hover:bg-neo-yellow w-full py-3 text-xs btn-wiggle">
-              Claim 20 Free Mins
+            <button onclick="tgCheckout(this, 'FREE')" class="btn-brutal bg-white hover:bg-neo-yellow w-full py-3 text-xs btn-wiggle">
+              Claim 20 Free Mins ($0 Today)
             </button>
           </div>
         </div>
@@ -2751,15 +2751,20 @@
     // -------------------------------------------------------------------
     const TG_API_BASE = 'https://translatigo-middleware.onrender.com/api/payments';
 
-    async function tgCheckout(btn, planTier) {
+    async function tgCheckout(btn, planTier, isTrial = false) {
       btn.disabled = true;
       const original = btn.textContent;
       btn.textContent = 'Loading…';
       try {
+        const isFreeTrial = (planTier === 'FREE' || isTrial);
+        const payload = {
+          planTier: isFreeTrial ? 'STARTER' : planTier,
+          ...(isFreeTrial ? { isTrial: true, trialCredits: 20 } : {}),
+        };
         const res = await fetch(`${TG_API_BASE}/link-mandate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ planTier }),
+          body: JSON.stringify(payload),
         });
         const data = await res.json();
         if (!res.ok || !data.checkoutUrl) throw new Error(data.error || 'checkout unavailable');
