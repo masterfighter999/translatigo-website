@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>FAQ Hub — Translatigo</title>
+<title>Translatigo Launches FAQ Hub — Translatigo</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,16 +58,21 @@
 
   .card-brutal {
     background: #FFFFFF; border: 3px solid #0D0D0D; box-shadow: 6px 6px 0px #0D0D0D;
-    transition: transform 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s cubic-bezier(0.16,1,0.3,1);
   }
-  .card-brutal:hover { transform: translate(-3px,-3px); box-shadow: 10px 10px 0px #0D0D0D; }
 
   .stamp-badge {
     display: inline-block; border: 3px dashed #0D0D0D; padding: 4px 10px;
     font-family: 'JetBrains Mono', monospace; font-weight: 800; text-transform: uppercase;
-    letter-spacing: 0.1em; transform: rotate(-3deg); transition: transform 0.2s ease;
+    letter-spacing: 0.1em; transform: rotate(-3deg);
   }
-  .stamp-badge:hover { transform: rotate(0deg) scale(1.05); }
+
+  .tg-content a { color: #FF486A; font-weight: 700; }
+  .tg-content img { border: 3px solid #0D0D0D; box-shadow: 5px 5px 0px #0D0D0D; max-width: 100%; height: auto; }
+  .tg-content h2, .tg-content h3 { text-transform: uppercase; font-weight: 800; margin-top: 1.2em; }
+  .tg-content p { margin-top: 1em; }
+  .tg-content blockquote {
+    border: 2px dashed #0D0D0D; background: #FFE600; padding: 12px 16px; font-style: italic;
+  }
 </style>
 </head>
 <body class="font-sans">
@@ -114,54 +119,43 @@
   </div>
 </header>
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
-  <div class="text-center mb-12">
-    <span class="stamp-badge bg-neo-coral text-white mb-3">FAQ HUB</span>
-    <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mt-2">Answers &amp; Guides</h1>
+  <span class="stamp-badge bg-neo-lime mb-4">Sep 14, 2026</span>
+
+  <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mt-4 mb-8">
+    Translatigo Launches FAQ Hub — Answers & Guides in One Place
+  </h1>
+
+  <div class="card-brutal p-8 sm:p-10 tg-content text-base sm:text-lg leading-relaxed">
+    <p>We're excited to announce the launch of our new <a href="/#faq">FAQ Hub</a> — a dedicated section on Translatigo.com where you can find answers to common questions, setup guides, and best practices for using our AI voice-to-voice interpreter.</p>
+
+    <h2>What's in the FAQ Hub</h2>
+    <p>The FAQ Hub consolidates everything you need to get started and troubleshoot Translatigo:</p>
+    <ul class="list-disc list-inside mt-4 space-y-2">
+      <li><strong>Getting Started</strong> — Install the Chrome extension, grant microphone permissions, and make your first interpreted call in under 60 seconds.</li>
+      <li><strong>Dialer Compatibility</strong> — Works with Avaya, Five9, RingCentral, Genesys, and any web-based softphone running in Chrome.</li>
+      <li><strong>Pricing & Billing</strong> — Transparent $0.07/min pricing with free 20-minute trial, no hidden fees.</li>
+      <li><strong>Language Support</strong> — 80+ languages and dialects with real-time voice-to-voice interpretation.</li>
+      <li><strong>Troubleshooting</strong> — Audio issues, permission problems, and performance optimization tips.</li>
+    </ul>
+
+    <h2>Why We Built It</h2>
+    <p>As Translatigo adoption grew across call centers and multilingual teams, we noticed the same questions coming up repeatedly. Rather than scattering answers across support emails and docs, we created a centralized, searchable FAQ Hub with brutalist design that matches the rest of our site — fast, direct, and easy to scan.</p>
+
+    <h2>Sitemap Integration</h2>
+    <p>The FAQ Hub is now included in our <a href="/sitemap.xml">sitemap.xml</a>, making it discoverable by search engines so new users can find answers before they even sign up.</p>
+
+    <blockquote>
+      "The FAQ Hub cuts support tickets in half — users self-serve the basics and only reach out for complex integrations."
+    </blockquote>
+
+    <h2>What's Next</h2>
+    <p>We'll be adding new FAQ entries weekly based on real user questions. Have something missing? <a href="mailto:support@translatigo.com">Email us</a> and we'll add it to the hub.</p>
   </div>
 
-  <!--
-    ADD NEW POSTS HERE.
-    Duplicate one <article class="card-brutal ..."> block per FAQ entry.
-    Each entry links to its own static page in /blog/posts/.
-    See /blog/posts/sample-post.html for the page template to duplicate.
-  -->
-  <div class="space-y-6" id="post-list">
-
-    <article class="card-brutal p-6">
-      <h2 class="text-xl sm:text-2xl font-black uppercase mb-2">
-        <a href="/blog/posts/translatigo-launches-faq-hub.html" class="hover:text-neo-coral">Translatigo Launches FAQ Hub — Answers & Guides in One Place</a>
-      </h2>
-      <div class="font-mono text-xs uppercase text-gray-600 mb-3">Sep 14, 2026</div>
-      <div class="text-base text-gray-800 leading-relaxed mb-4">
-        New FAQ Hub consolidates setup guides, dialer compatibility, pricing, language support, and troubleshooting — now live and indexed in sitemap.xml.
-      </div>
-      <a href="/blog/posts/translatigo-launches-faq-hub.html" class="btn-brutal bg-neo-yellow px-5 py-2.5 text-sm">Read More →</a>
-    </article>
-
-    <article class="card-brutal p-6">
-      <h2 class="text-xl sm:text-2xl font-black uppercase mb-2">
-        <a href="/blog/posts/does-ai-interpretation-work-with-avaya-dialers.html" class="hover:text-neo-coral">Does AI Phone Interpretation Work With Avaya, Five9, or RingCentral Dialers?</a>
-      </h2>
-      <div class="font-mono text-xs uppercase text-gray-600 mb-3">Sep 14, 2026</div>
-      <div class="text-base text-gray-800 leading-relaxed mb-4">
-        Translatigo runs as a Chrome extension directly on browser audio, meaning it works out of the box with web-based softphones and dialers like Avaya, Five9, RingCentral, and Genesys without complex API integrations.
-      </div>
-      <a href="/blog/posts/does-ai-interpretation-work-with-avaya-dialers.html" class="btn-brutal bg-neo-yellow px-5 py-2.5 text-sm">Read More →</a>
-    </article>
-
-    <article class="card-brutal p-6">
-      <h2 class="text-xl sm:text-2xl font-black uppercase mb-2">
-        <a href="/blog/posts/ai-phone-interpretation-cost-per-minute.html" class="hover:text-neo-coral">How Much Does AI Phone Interpretation Cost Per Minute?</a>
-      </h2>
-      <div class="font-mono text-xs uppercase text-gray-600 mb-3">Sep 14, 2026</div>
-      <div class="text-base text-gray-800 leading-relaxed mb-4">
-        Translatigo charges $0.07 per minute for real-time voice-to-voice interpretation compared to $1.50–$3.50/min for human Over-the-Phone Interpretation (OPI), saving call centers and businesses over 95% on language support.
-      </div>
-      <a href="/blog/posts/ai-phone-interpretation-cost-per-minute.html" class="btn-brutal bg-neo-yellow px-5 py-2.5 text-sm">Read More →</a>
-    </article>
-
+  <div class="mt-8">
+    <a href="/blog/" class="btn-brutal bg-neo-cyan px-5 py-2.5 text-sm">← Back to FAQ Hub</a>
   </div>
 
 </div>
