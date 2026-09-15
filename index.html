@@ -13,8 +13,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
+    rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@500;700;900&display=swap"
-    rel="stylesheet">
+    media="print"
+    onload="this.media='all'">
+  <noscript>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@500;700;900&display=swap">
+  </noscript>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -654,7 +661,7 @@
           <div class="flex items-center gap-1.5">
             <span class="text-2xl font-black tracking-tight uppercase">TRANSLATIGO</span>
             <span
-              class="bg-neo-coral text-white font-mono text-[10px] font-extrabold px-1.5 py-0.5 border border-neo-black shadow-[2px_2px_0px_#000]">.COM</span>
+              class="bg-neo-coral text-black font-mono text-[10px] font-black px-1.5 py-0.5 border border-neo-black shadow-[2px_2px_0px_#000]">.COM</span>
           </div>
           <span class="text-[11px] font-mono font-bold text-gray-700 tracking-wider">AI VOICE-TO-VOICE
             INTERPRETER</span>
@@ -700,6 +707,7 @@
       </div>
     </div>
   </header>
+  <main id="main-content">
 
   <!-- ================================================================= -->
   <!-- 3. HERO SECTION                                                   -->
@@ -896,7 +904,7 @@
                       TG
                     </div>
                     <div>
-                      <h4 class="font-black text-sm uppercase">Translatigo Live</h4>
+                      <div class="font-black text-sm uppercase" role="heading" aria-level="3">Translatigo Live</div>
                       <p class="font-mono text-[10px] text-gray-600">CHROME EXTENSION POPUP</p>
                     </div>
                   </div>
@@ -1174,7 +1182,8 @@
                       <div class="track-visual">
                         <div id="bufferFill" class="track-fill fill-cyan"></div>
                       </div>
-                      <input type="range" id="bufferSlider" min="20" max="100" value="61">
+                      <input type="range" id="bufferSlider" min="20" max="100" value="61"
+                        aria-label="Buffer Window duration (milliseconds)">
                     </div>
                     <span id="bufferValueText" class="slider-badge">61ms</span>
                   </div>
@@ -1188,7 +1197,8 @@
                       <div class="track-visual">
                         <div id="noiseFill" class="track-fill fill-pink"></div>
                       </div>
-                      <input type="range" id="noiseSlider" min="5" max="50" value="29">
+                      <input type="range" id="noiseSlider" min="5" max="50" value="29"
+                        aria-label="Noise Floor threshold (decibels)">
                     </div>
                     <span id="noiseValueText" class="slider-badge">29dB</span>
                   </div>
@@ -1218,6 +1228,7 @@
 
                   <div class="flex items-center gap-1.5">
                     <select id="source-lang-select" onchange="updateLanguagePairs('source')"
+                      aria-label="Source Language (input audio)"
                       class="font-mono text-[11px] font-bold bg-white border border-black px-1.5 py-0.5 shadow-[1px_1px_0px_#000] focus:outline-none cursor-pointer">
                       <option value="en">🇺🇸 English</option>
                       <option value="es">🇪🇸 Spanish</option>
@@ -1274,6 +1285,7 @@
 
                   <div class="flex items-center gap-1.5">
                     <select id="target-lang-select" onchange="updateLanguagePairs('target')"
+                      aria-label="Target Language (output audio)"
                       class="font-mono text-[11px] font-bold bg-white border border-black px-1.5 py-0.5 shadow-[1px_1px_0px_#000] focus:outline-none cursor-pointer">
                       <option value="de" selected>🇩🇪 German</option>
                       <option value="en">🇺🇸 English</option>
@@ -1396,7 +1408,7 @@
 
       <!-- Section Header -->
       <div class="text-center max-w-3xl mx-auto mb-14">
-        <span class="stamp-badge bg-neo-coral text-white mb-3">THE REAL COST OF INTERPRETATION</span>
+        <span class="stamp-badge bg-neo-coral text-black font-black mb-3">THE REAL COST OF INTERPRETATION</span>
         <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mt-2">
           Why Translatigo Is Far More Value For Money Than Human Interpreters:
         </h2>
@@ -1646,7 +1658,7 @@
           <span>•</span>
           <span>Starter: <strong>$0.09/min (9¢)</strong></span>
           <span>•</span>
-          <span class="text-neo-coral font-black">Pro: <strong>$0.08/min (8¢)</strong></span>
+          <span class="text-[#B91C1C] font-black">Pro: <strong>$0.08/min (8¢)</strong></span>
           <span>•</span>
           <span class="bg-neo-cyan px-2 py-0.5 border border-black font-black">Business: <strong>$0.07/min
               (7¢)</strong></span>
@@ -1814,7 +1826,7 @@
         <div class="card-brutal p-6 bg-white flex flex-col justify-between reveal-item">
           <div>
             <span
-              class="font-mono text-xs font-black bg-neo-coral text-white px-2 py-0.5 border-2 border-black inline-block uppercase mb-3">
+              class="font-mono text-xs font-black bg-neo-coral text-black px-2 py-0.5 border-2 border-black inline-block uppercase mb-3">
               HEAVY VOLUME &amp; SCALE
             </span>
             <h3 class="text-2xl font-black uppercase">BUSINESS</h3>
@@ -1962,7 +1974,7 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="text-center mb-12">
-        <span class="stamp-badge bg-neo-coral text-white mb-3">FREQUENT INQUIRIES</span>
+        <span class="stamp-badge bg-neo-coral text-black font-black mb-3">FREQUENT INQUIRIES</span>
         <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-neo-black mt-2">
           Frequently Answered Questions
         </h2>
@@ -2078,6 +2090,7 @@
 
     </div>
   </section>
+  </main>
 
   <!-- Footer -->
   <footer class="bg-neo-black text-white py-14">
@@ -2090,7 +2103,7 @@
           </div>
           <div>
             <span class="text-2xl font-black tracking-tight uppercase">TRANSLATIGO.COM</span>
-            <p class="font-mono text-xs text-gray-400">They Speak Their Language. You Hear It In Yours. (80 Languages)
+            <p class="font-mono text-xs text-gray-300">They Speak Their Language. You Hear It In Yours. (80 Languages)
             </p>
           </div>
         </div>
@@ -2099,7 +2112,7 @@
           <span>CHROME EXTENSION ACTIVE • FIRST-TIME 20 MINS FREE</span>
         </div>
       </div>
-      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-gray-500">
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-gray-300">
         <div>&copy; 2026 TRANSLATIGO.COM. ALL RIGHTS RESERVED.</div>
         <div class="flex gap-4">
           <a href="#extension" class="hover:text-neo-yellow">Chrome Extension</a>
@@ -2239,7 +2252,7 @@
             </div>
             <div class="font-black text-sm text-neo-black truncate">${lang.name}</div>
           </div>
-          <div class="text-[10px] text-neo-coral font-mono font-bold mt-2 flex items-center justify-between">
+          <div class="text-[10px] text-emerald-700 font-mono font-black mt-2 flex items-center justify-between">
             <span>Supported</span>
             <span>✓</span>
           </div>
