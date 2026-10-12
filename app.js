@@ -172,38 +172,34 @@
       pl: "Dzień dobry, nasza centralna baza danych w Tokio przestała odpowiadać. Potrzebujemy natychmiastowego protokołu awaryjnego."
     };
 
-    const CHANNELS = [
+    const SIMULATOR_PRESETS = [
       {
+        id: "tokyo-outage",
+        name: "🚨 Tokyo Outage",
         srcCode: "en",
-        srcFlag: "🇺🇸",
-        srcLang: "English",
+        outCode: "ja",
+        srcText: "Hello, our central database in Tokyo has stopped responding to inbound queries. We need emergency failover protocol immediately.",
+        outText: "こんにちは。東京の中央データベースが着信クエリに応答しなくなりました。直ちに緊急フェイルオーバープロトコルが必要です。"
+      },
+      {
+        id: "concierge",
+        name: "🏨 Concierge",
+        srcCode: "en",
         outCode: "es",
-        outFlag: "🇪🇸",
-        outLang: "Spanish",
-        srcText: "Enjoy clear, real-time communication.",
-        outText: "Disfrute de una comunicación clara y en tiempo real."
+        srcText: "Good evening, our flight arrived late. Can we arrange a private airport transfer and late check-in for two guests?",
+        outText: "Buenas noches, nuestro vuelo llegó con retraso. ¿Podríamos organizar un traslado privado desde el aeropuerto y el registro tardío para dos huéspedes?"
       },
       {
-        srcCode: "ja",
-        srcFlag: "🇯🇵",
-        srcLang: "Japanese",
-        outCode: "en",
-        outFlag: "🇺🇸",
-        outLang: "English",
-        srcText: "クリアなコミュニケーションをお楽しみください。",
-        outText: "Enjoy crystal-clear communication."
-      },
-      {
+        id: "enterprise",
+        name: "💼 Enterprise",
         srcCode: "fr",
-        srcFlag: "🇫🇷",
-        srcLang: "French",
         outCode: "de",
-        outFlag: "🇩🇪",
-        outLang: "German",
         srcText: "Profitez d'une communication claire et instantanée.",
         outText: "Genießen Sie eine klare und sofortige Kommunikation."
       }
     ];
+
+    const CHANNELS = SIMULATOR_PRESETS;
 
     const LANG_METADATA = {
       en: { flag: "🇺🇸", name: "English" },
@@ -366,8 +362,18 @@
       }
     }
 
-    function setChannel(idx) {
+    function setPreset(idx) {
+      currentPresetIdx = idx;
       currentChannelIdx = idx;
+      document.querySelectorAll(".preset-btn").forEach((btn, i) => {
+        if (i === idx) {
+          btn.classList.add("bg-neo-yellow", "active-preset");
+          btn.classList.remove("bg-white");
+        } else {
+          btn.classList.remove("bg-neo-yellow", "active-preset");
+          btn.classList.add("bg-white");
+        }
+      });
       document.querySelectorAll(".channel-btn").forEach((btn, i) => {
         btn.classList.toggle("active", i === idx);
       });
@@ -376,7 +382,7 @@
         btn.classList.add("bg-white");
       });
 
-      const data = CHANNELS[idx];
+      const data = SIMULATOR_PRESETS[idx];
       if (!data) return;
 
       const srcSelect = document.getElementById("source-lang-select");
@@ -398,11 +404,24 @@
       updatePipelineBadgesAndTranscripts();
     }
 
+    function setChannel(idx) {
+      setPreset(idx);
+    }
+
     function setScenario(id) {
+      const idx = SIMULATOR_PRESETS.findIndex(p => p.id === id);
+      if (idx !== -1) {
+        setPreset(idx);
+        return;
+      }
       if (!SCENARIOS[id]) return;
       currentScenario = id;
       const sc = SCENARIOS[id];
 
+      document.querySelectorAll(".preset-btn").forEach(btn => {
+        btn.classList.remove("bg-neo-yellow", "active-preset");
+        btn.classList.add("bg-white");
+      });
       document.querySelectorAll(".channel-btn").forEach(btn => btn.classList.remove("active"));
       document.querySelectorAll(".scenario-btn").forEach(btn => {
         if (btn.getAttribute("data-id") === id) {
@@ -419,10 +438,10 @@
       const srcSelect = document.getElementById("source-lang-select");
       const trgSelect = document.getElementById("target-lang-select");
 
-      if (srcSelect) srcSelect.value = sc.sourceLang;
-      if (trgSelect) trgSelect.value = sc.targetLang;
-      if (callerEl) callerEl.value = sc.sourceText;
-      if (targetEl) targetEl.value = sc.targetText;
+      if (srcSelect) srcSelect.value = sc.sourceLang || sc.srcCode;
+      if (trgSelect) trgSelect.value = sc.targetLang || sc.outCode;
+      if (callerEl) callerEl.value = sc.sourceText || sc.srcText;
+      if (targetEl) targetEl.value = sc.targetText || sc.outText;
 
       const statusBadge = document.getElementById("translation-status-badge");
       if (statusBadge) {
@@ -468,6 +487,17 @@
       const srcCode = srcSelect.value;
       const trgCode = trgSelect.value;
 
+      document.querySelectorAll(".preset-btn").forEach((btn, idx) => {
+        const pr = SIMULATOR_PRESETS[idx];
+        if (pr && pr.srcCode === srcCode && pr.outCode === trgCode) {
+          btn.classList.add("bg-neo-yellow", "active-preset");
+          btn.classList.remove("bg-white");
+        } else {
+          btn.classList.remove("bg-neo-yellow", "active-preset");
+          btn.classList.add("bg-white");
+        }
+      });
+
       document.querySelectorAll(".channel-btn").forEach((btn, idx) => {
         const ch = CHANNELS[idx];
         if (ch && ch.srcCode === srcCode && ch.outCode === trgCode) {
@@ -480,7 +510,7 @@
       document.querySelectorAll(".scenario-btn").forEach(btn => {
         const scId = btn.getAttribute("data-id");
         const sc = SCENARIOS[scId];
-        if (sc && sc.sourceLang === srcCode && sc.targetLang === trgCode) {
+        if (sc && (sc.sourceLang || sc.srcCode) === srcCode && (sc.targetLang || sc.outCode) === trgCode) {
           btn.classList.add("bg-neo-yellow", "active-scenario");
           btn.classList.remove("bg-white");
         } else {

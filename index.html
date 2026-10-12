@@ -210,26 +210,7 @@
       animation: brutal-wiggle 0.3s ease-in-out infinite alternate;
     }
 
-    /* Infinite marquee animation */
-    @keyframes marquee-left {
-      0% {
-        transform: translateX(0);
-      }
 
-      100% {
-        transform: translateX(-50%);
-      }
-    }
-
-    .animate-marquee-left {
-      display: flex;
-      width: 200%;
-      animation: marquee-left 25s linear infinite;
-    }
-
-    .marquee-container:hover .animate-marquee-left {
-      animation-play-state: paused;
-    }
 
     /* Rubber stamp style */
     .stamp-badge {
@@ -612,49 +593,7 @@
 
 <body class="overflow-x-hidden">
 
-  <!-- ================================================================= -->
-  <!-- 1. TOP MARQUEE STATUS BAR                                         -->
-  <!-- ================================================================= -->
-  <div
-    class="bg-neo-yellow border-b-[3px] border-neo-black py-1.5 overflow-hidden select-none font-mono text-xs font-bold uppercase tracking-wider marquee-container">
-    <div class="animate-marquee-left flex items-center space-x-6">
-      <span class="inline-flex items-center gap-2"><span
-          class="w-2.5 h-2.5 bg-neo-lime rounded-full border border-black animate-ping"></span> CHROME EXTENSION
-        LIVE</span>
-      <span>✦</span>
-      <span>CLOSE SALES WITH GLOBAL CLIENTS IN THEIR OWN LANGUAGE</span>
-      <span>✦</span>
-      <span>THEY SPEAK THEIR LANGUAGE • YOU HEAR IT IN YOURS</span>
-      <span>✦</span>
-      <span>DESIGNED FOR ZOOM, GOOGLE MEET &amp; MICROSOFT TEAMS</span>
-      <span>✦</span>
-      <span>80 LANGUAGES &amp; REGIONAL SCRIPTS SUPPORTED</span>
-      <span>✦</span>
-      <span>LESS LATENCY &amp; FAR MORE VALUE FOR MONEY THAN HUMAN INTERPRETERS</span>
-      <span>✦</span>
-      <span>FIRST-TIME SIGNUP: 20 FREE MINUTES</span>
-      <span>✦</span>
-      <span>ROADMAP: BPO TELEPHONY PHONE BRIDGE (PHASE 2)</span>
-      <span>✦</span>
-      <!-- Loop duplicate -->
-      <span class="inline-flex items-center gap-2"><span
-          class="w-2.5 h-2.5 bg-neo-lime rounded-full border border-black"></span> CHROME EXTENSION LIVE</span>
-      <span>✦</span>
-      <span>CLOSE SALES WITH GLOBAL CLIENTS IN THEIR OWN LANGUAGE</span>
-      <span>✦</span>
-      <span>THEY SPEAK THEIR LANGUAGE • YOU HEAR IT IN YOURS</span>
-      <span>✦</span>
-      <span>DESIGNED FOR ZOOM, GOOGLE MEET &amp; MICROSOFT TEAMS</span>
-      <span>✦</span>
-      <span>80 LANGUAGES &amp; REGIONAL SCRIPTS SUPPORTED</span>
-      <span>✦</span>
-      <span>LESS LATENCY &amp; FAR MORE VALUE FOR MONEY THAN HUMAN INTERPRETERS</span>
-      <span>✦</span>
-      <span>FIRST-TIME SIGNUP: 20 FREE MINUTES</span>
-      <span>✦</span>
-      <span>ROADMAP: BPO TELEPHONY PHONE BRIDGE (PHASE 2)</span>
-    </div>
-  </div>
+
 
   <!-- ================================================================= -->
   <!-- 2. STICKY NEOBRUTALIST HEADER                                     -->
@@ -1141,30 +1080,11 @@
           <!-- Scenario & Channel Selector Bar (Single Ultra-Compact Row) -->
           <div class="mb-3.5 flex flex-col md:flex-row md:items-center justify-between gap-2">
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="font-mono text-[10px] font-black uppercase text-gray-500 mr-0.5">Channels:</span>
-              <div class="flex flex-wrap gap-1" id="channel-buttons">
-                <button onclick="setChannel(0)" class="channel-btn brutal-border-sm text-[11px] px-2 py-0.5"
-                  data-channel="0">🇺🇸 EN ➔ 🇪🇸 ES</button>
-                <button onclick="setChannel(1)" class="channel-btn brutal-border-sm text-[11px] px-2 py-0.5"
-                  data-channel="1">🇯🇵 JA ➔ 🇺🇸 EN</button>
-                <button onclick="setChannel(2)" class="channel-btn brutal-border-sm text-[11px] px-2 py-0.5 active"
-                  data-channel="2">🇫🇷 FR ➔ 🇩🇪 DE</button>
-              </div>
-              <span class="hidden sm:inline font-mono text-gray-300 mx-0.5">|</span>
               <span class="font-mono text-[10px] font-black uppercase text-gray-500 mr-0.5">Presets:</span>
-              <div class="flex flex-wrap gap-1" id="scenario-buttons">
-                <button onclick="setScenario('support')"
-                  class="scenario-btn btn-brutal bg-white text-[10px] px-1.5 py-0.5" data-id="support">🚨 Tokyo
-                  Outage</button>
-                <button onclick="setScenario('hotel')"
-                  class="scenario-btn btn-brutal bg-white text-[10px] px-1.5 py-0.5" data-id="hotel">🏨
-                  Concierge</button>
-                <button onclick="setScenario('medical')"
-                  class="scenario-btn btn-brutal bg-white text-[10px] px-1.5 py-0.5" data-id="medical">🩺
-                  Medical</button>
-                <button onclick="setScenario('sales')"
-                  class="scenario-btn btn-brutal bg-white text-[10px] px-1.5 py-0.5" data-id="sales">💼
-                  Enterprise</button>
+              <div class="flex flex-wrap gap-1" id="preset-buttons">
+                <button onclick="setPreset(0)" class="preset-btn btn-brutal bg-white text-[10px] sm:text-[11px] px-2 py-0.5" data-preset="0">🚨 Tokyo Outage (EN ➔ JA)</button>
+                <button onclick="setPreset(1)" class="preset-btn btn-brutal bg-white text-[10px] sm:text-[11px] px-2 py-0.5" data-preset="1">🏨 Concierge (EN ➔ ES)</button>
+                <button onclick="setPreset(2)" class="preset-btn btn-brutal bg-neo-yellow active-preset text-[10px] sm:text-[11px] px-2 py-0.5" data-preset="2">💼 Enterprise (FR ➔ DE)</button>
               </div>
             </div>
 
