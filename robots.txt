@@ -1,0 +1,33 @@
+User-agent: *
+Allow: /
+
+# OpenAI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic Claude Crawlers
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# Google Gemini / AI Crawlers
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity Crawlers
+User-agent: PerplexityBot
+Allow: /
+
+# Apple AI Crawler
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://translatigo.com/sitemap.xml
