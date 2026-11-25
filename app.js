@@ -552,12 +552,13 @@
         hubAngle = (hubAngle + hubSpeed) % 360;
 
         // 2. Wave parameters (amplitude & jitter driven by noiseFloor; frequency & travel speed driven by bufferWindow)
-        const waveAmp = (8 + noiseNorm * 22) * voiceMultiplier;
+        // Reduced peak amplitude for a cleaner, balanced waveform
+        const waveAmp = (4 + noiseNorm * 9) * voiceMultiplier;
         const waveFreq = 0.55 + (1.0 - bufferNorm) * 0.75;
         const waveSpeed = 2.2 + (1.0 - bufferNorm) * 3.0;
 
-        const leftPath = generateWavePath(61.2, 208.08, 153, waveAmp, waveFreq, animTime * waveSpeed, noiseNorm);
-        const rightPath = generateWavePath(403.92, 550.8, 153, waveAmp * 0.9, waveFreq * 1.05, animTime * (waveSpeed * 1.05), noiseNorm);
+        const leftPath = generateWavePath(61.2, 208.08, 153, waveAmp, waveFreq, animTime * waveSpeed, noiseNorm * 0.5);
+        const rightPath = generateWavePath(403.92, 550.8, 153, waveAmp * 0.9, waveFreq * 1.05, animTime * (waveSpeed * 1.05), noiseNorm * 0.5);
 
         if (leftWavePath) leftWavePath.setAttribute("d", leftPath);
         if (rightWavePath) rightWavePath.setAttribute("d", rightPath);
