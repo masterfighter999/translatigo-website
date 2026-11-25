@@ -243,9 +243,13 @@
     .sim-card {
       position: relative;
       width: 100%;
+      height: 100%;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
       background-color: #fafafa;
       box-shadow: 4px 4px 0px 0px #000;
-      margin-bottom: 12px;
+      margin-bottom: 0;
       overflow: hidden;
     }
 
@@ -339,8 +343,11 @@
     .canvas-container {
       position: relative;
       width: 100%;
-      aspect-ratio: 612 / 280;
-      min-height: 200px;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 280px;
     }
 
     svg.pipeline-svg {
@@ -395,8 +402,8 @@
       }
 
       .canvas-container {
-        min-height: 190px;
-        aspect-ratio: 612 / 280;
+        min-height: 220px;
+        flex: 1 1 auto;
       }
     }
 
@@ -1325,10 +1332,10 @@
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 items-stretch">
 
             <!-- LEFT COLUMN: Animated SVG Pipeline & Telemetry Metrics -->
-            <div class="flex flex-col justify-between">
+            <div class="flex flex-col h-full">
 
               <!-- SIMULATION CANVAS (The user's SVG pipeline) -->
-              <div class="sim-card brutal-border">
+              <div class="sim-card brutal-border flex-1">
                 <div class="grid-bg"></div>
 
                 <!-- Play / Pause Toggle Button -->
@@ -1391,32 +1398,100 @@
                       stroke-dasharray="8 8">
                     </path>
 
-                    <!-- Source Node & Animated Sine Wave -->
-                    <circle cx="134.64" cy="153" r="27.54" fill="#ec4899" stroke="#000000" stroke-width="3"></circle>
+                    <!-- Animated Sine Waves (Rendered behind the avatar nodes) -->
                     <path id="leftWave" d="" fill="none" stroke="#000000" stroke-width="3.5" stroke-linecap="square">
                     </path>
-
-                    <!-- Destination Node & Sine Wave -->
-                    <circle cx="477.36" cy="153" r="27.54" fill="#10b981" stroke="#000000" stroke-width="3"></circle>
                     <path id="rightWave" d="" fill="none" stroke="#000000" stroke-width="3.5" stroke-linecap="square">
                     </path>
 
-                    <!-- Traveling Packets -->
-                    <g id="packetsGroup">
-                      <rect class="packet" width="10" height="10" fill="#3b82f6" stroke="#000000" stroke-width="2">
-                      </rect>
-                      <rect class="packet" width="10" height="10" fill="#3b82f6" stroke="#000000" stroke-width="2">
-                      </rect>
-                      <rect class="packet" width="10" height="10" fill="#3b82f6" stroke="#000000" stroke-width="2">
-                      </rect>
-                      <rect class="packet" width="10" height="10" fill="#eab308" stroke="#000000" stroke-width="2">
-                      </rect>
-                    </g>
+                    <!-- Source Node (Caller Face - Duolingo/Chibi Flat Aesthetic) -->
+                    <g id="sourceNodeGroup">
+                      <g id="sourceNodeGroup" transform="translate(134.64, 153) scale(1.4) translate(-134.64, -153)">
+                        <!-- Base Outer Circle Ring -->
+                        <circle cx="134.64" cy="153" r="28" fill="#582a12" stroke="#000000" stroke-width="2.5"></circle>
 
-                    <!-- Rotating Center Cube (HUB) -->
-                    <rect id="hubOuter" x="284" y="131" width="44" height="44" fill="#ffffff" stroke="#000000"
-                      stroke-width="3"></rect>
-                    <rect id="hubInner" x="296" y="143" width="20" height="20" fill="#000000"></rect>
+                        <!-- Back hair bob -->
+                        <path d="M 112 153 C 108 168 116 179 134.64 179 C 153.28 179 161.28 168 157.28 153 Z"
+                          fill="#582a12"></path>
+
+                        <!-- Face shape -->
+                        <ellipse cx="134.64" cy="156" rx="20" ry="17.5" fill="#fec59a"></ellipse>
+
+                        <!-- Front wavy bangs hair -->
+                        <path
+                          d="M 115 152 C 114 140 123 131 134.64 131 C 146.28 131 155.28 140 154.28 152 C 151 146 145 144 141 148 C 137 152 131 143 125 142 C 120 141 117 147 115 152 Z"
+                          fill="#582a12"></path>
+
+                        <!-- Cute rosy cheeks -->
+                        <circle cx="123" cy="160" r="4" fill="#ff8a80" opacity="0.85"></circle>
+                        <circle cx="146.28" cy="160" r="4" fill="#ff8a80" opacity="0.85"></circle>
+
+                        <!-- Big dark round eyes -->
+                        <circle cx="126" cy="154" r="3.2" fill="#3e1c08"></circle>
+                        <circle cx="143.28" cy="154" r="3.2" fill="#3e1c08"></circle>
+
+                        <!-- Big open happy mouth (white semicircle with dark stroke) -->
+                        <path d="M 129.5 162 Q 134.64 162 139.78 162 Q 134.64 170 129.5 162 Z" fill="#ffffff"
+                          stroke="#3e1c08" stroke-width="1.2"></path>
+                      </g>
+
+                      <!-- Destination Node (Listener Face with Headset - Duolingo/Chibi Flat Aesthetic) -->
+                      <g id="targetNodeGroup">
+                        <g id="targetNodeGroup" transform="translate(477.36, 153) scale(1.4) translate(-477.36, -153)">
+                          <!-- Base Outer Circle Ring -->
+                          <circle cx="477.36" cy="153" r="28" fill="#1b2a4a" stroke="#000000" stroke-width="2.5">
+                          </circle>
+
+                          <!-- Back hair -->
+                          <path d="M 455 153 C 451 168 459 179 477.36 179 C 495.72 179 503.72 168 499.72 153 Z"
+                            fill="#1b2a4a"></path>
+
+                          <!-- Face shape -->
+                          <ellipse cx="477.36" cy="156" rx="20" ry="17.5" fill="#fcd0a1"></ellipse>
+
+                          <!-- Front short hair bangs -->
+                          <path
+                            d="M 458 152 C 457 140 466 131 477.36 131 C 488.72 131 497.72 140 496.72 152 C 492 145 484 143 479 146 C 474 143 464 144 458 152 Z"
+                            fill="#1b2a4a"></path>
+
+                          <!-- Headset Band over hair -->
+                          <path d="M 454 153 C 454 133 500.72 133 500.72 153" fill="none" stroke="#000000"
+                            stroke-width="3" stroke-linecap="round"></path>
+                          <!-- Headset earpads (neo-lime) -->
+                          <rect x="451" y="148" width="5.5" height="11" rx="2.5" fill="#10b981" stroke="#000000"
+                            stroke-width="1.5"></rect>
+                          <rect x="498.22" y="148" width="5.5" height="11" rx="2.5" fill="#10b981" stroke="#000000"
+                            stroke-width="1.5"></rect>
+
+                          <!-- Cute rosy cheeks -->
+                          <circle cx="466" cy="160" r="4" fill="#ff8a80" opacity="0.85"></circle>
+                          <circle cx="488.72" cy="160" r="4" fill="#ff8a80" opacity="0.85"></circle>
+
+                          <!-- Big dark round eyes -->
+                          <circle cx="469" cy="154" r="3.2" fill="#101e38"></circle>
+                          <circle cx="485.72" cy="154" r="3.2" fill="#101e38"></circle>
+
+                          <!-- Big open happy mouth (white semicircle with dark outline) -->
+                          <path d="M 472.5 162 Q 477.36 162 482.22 162 Q 477.36 170 472.5 162 Z" fill="#ffffff"
+                            stroke="#101e38" stroke-width="1.2"></path>
+                        </g>
+
+                        <!-- Traveling Packets -->
+                        <g id="packetsGroup">
+                          <rect class="packet" width="10" height="10" fill="#3b82f6" stroke="#000000" stroke-width="2">
+                          </rect>
+                          <rect class="packet" width="10" height="10" fill="#3b82f6" stroke="#000000" stroke-width="2">
+                          </rect>
+                          <rect class="packet" width="10" height="10" fill="#3b82f6" stroke="#000000" stroke-width="2">
+                          </rect>
+                          <rect class="packet" width="10" height="10" fill="#eab308" stroke="#000000" stroke-width="2">
+                          </rect>
+                        </g>
+
+                        <!-- Rotating Center Cube (HUB) -->
+                        <rect id="hubOuter" x="284" y="131" width="44" height="44" fill="#ffffff" stroke="#000000"
+                          stroke-width="3"></rect>
+                        <rect id="hubInner" x="296" y="143" width="20" height="20" fill="#000000"></rect>
                   </svg>
 
                   <!-- Transcription Banner -->
@@ -1430,83 +1505,6 @@
                         <span style="color:#6b21a8; margin-right:4px;">OUT:</span>
                         <span id="outTextVal">“Genießen Sie eine klare und sofortige Kommunikation.”</span>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- METRICS ROW & DSP SLIDERS -->
-              <div class="space-y-1.5">
-                <!-- Metrics Grid -->
-                <div class="metrics-grid">
-                  <div class="metric-card metric-latency brutal-border">
-                    <div class="metric-header">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="3">
-                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                      </svg>
-                      <span>Latency</span>
-                    </div>
-                    <span id="metricLatency" class="metric-val">66.8ms</span>
-                  </div>
-
-                  <div class="metric-card metric-accuracy brutal-border">
-                    <div class="metric-header">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="3">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
-                        <path d="m9 12 2 2 4-4"></path>
-                      </svg>
-                      <span>Accuracy</span>
-                    </div>
-                    <span id="metricAccuracy" class="metric-val">94.7%</span>
-                  </div>
-
-                  <div class="metric-card metric-bitrate brutal-border">
-                    <div class="metric-header">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="3">
-                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                      </svg>
-                      <span>Bitrate</span>
-                    </div>
-                    <span id="metricBitrate" class="metric-val">114kbps</span>
-                  </div>
-                </div>
-
-                <!-- DSP Sliders -->
-                <div class="sliders-grid">
-                  <!-- Buffer Window -->
-                  <div class="slider-box brutal-border-sm">
-                    <div class="font-mono text-[9px] font-black uppercase tracking-wider text-gray-700">BUFFER WINDOW
-                    </div>
-                    <div class="slider-row">
-                      <div class="range-wrap">
-                        <div class="track-visual">
-                          <div id="bufferFill" class="track-fill fill-cyan"></div>
-                        </div>
-                        <input type="range" id="bufferSlider" min="20" max="100" value="61"
-                          aria-label="Buffer Window duration (milliseconds)">
-                      </div>
-                      <span id="bufferValueText" class="slider-badge">61ms</span>
-                    </div>
-                  </div>
-
-                  <!-- Noise Floor -->
-                  <div class="slider-box brutal-border-sm">
-                    <div class="font-mono text-[9px] font-black uppercase tracking-wider text-gray-700">NOISE FLOOR
-                    </div>
-                    <div class="slider-row">
-                      <div class="range-wrap">
-                        <div class="track-visual">
-                          <div id="noiseFill" class="track-fill fill-pink"></div>
-                        </div>
-                        <input type="range" id="noiseSlider" min="5" max="50" value="29"
-                          aria-label="Noise Floor threshold (decibels)">
-                      </div>
-                      <span id="noiseValueText" class="slider-badge">29dB</span>
                     </div>
                   </div>
                 </div>
